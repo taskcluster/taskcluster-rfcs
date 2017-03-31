@@ -32,3 +32,12 @@ Work with the team to get consensus, and update [the project](https://github.com
 ### I'm Working on This!
 
 Assign the issue to yourself, and to any others working on with you. Update the first comment in the issue to point to any related stuff - bugs, repos, etherpads, gists, whatever. There's no need to update the issue with status -- that should be visible via the links.
+
+## Labels
+
+* `gecko-migration` -- related to the migration of Gecko fully to TC.  These need not be *blockers* to the migration, just related.
+* `good-student-project` -- something good for GSoC, Outreachy, an intern, or a committed contributor>
+* `ktlo` -- Keeping The Lights On: internally focused improvements to help keep us going, but with little user-visible impact>
+* `r14y` -- redeployability: related to the ability to deploy an entire taskcluster instance. Note that we do not intend to support external redeployments of taskcluster: this is for development and staging purposes only.
+* `tc-1.0` -- User-visible features and feature completeness. This can include redesigns of existing features.
+* `TCaaS` -- Taskcluster as a service: additional functionality that will allow us to serve a broad array of projects
