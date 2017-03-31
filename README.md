@@ -31,4 +31,4 @@ Work with the team to get consensus, and update [the project](https://github.com
 
 ### I'm Working on This!
 
-Update the first comment in the issue to point to any related stuff - bugs, repos, etherpads, gists, whatever.
+Assign the issue to yourself, and to any others working on with you. Update the first comment in the issue to point to any related stuff - bugs, repos, etherpads, gists, whatever. There's no need to update the issue with status -- that should be visible via the links.
