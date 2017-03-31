@@ -10,14 +10,14 @@ The Git repo itsel fhas no real content -- the interesting stuff is in the [issu
 
 ### I Have an Idea!
 
-Open an issue!
+Open an issue! Issues should either be more than a week's work, or potentially controversial.  Anything else can just be filed as a bug (assigned to yourself, of course).
 
 Ideas should have
  * a pretty specific goal: a user story ("Users can..."), dependency ("This will allow ..") or a completion condition ("All services ..");
  * some vague idea of how this might be accomplished, or a few alternatives; and
  * a list of required resources (time, money, people)
 
-They should either be more than a week's work, or potentially controversial.  Anything else can just be filed as a bug (assigned to yourself, of course).
+You can leave the issue un-assigned.  Shop the issue around to the team to try to get a diversity of opinions on it.
 
 ### I Have an Opinion!
 
