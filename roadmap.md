@@ -20,6 +20,7 @@ While taskcluster is designed as a general tool, its primary customer is Gecko.
    * Task and task-group exploration
  * In-Tree Images for All Platforms -- expand the support we have for defining Linux environments in-tree to cover OS X and Windows
    * Replace all uses of Generic-Worker with Taskcluster-Worker
+ * Parameterized in-tree action task definitions
  * Smart optimization of in-tree taskgraphs (avoiding running unnecessary tasks)
  * Better interface for try (better way to specify expected tasks and/or better discovery of required tasks)
 
