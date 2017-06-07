@@ -1,5 +1,9 @@
 # TaskCluster RFCs
 
+Please see the [issue list](https://github.com/djmitche/taskcluster-rfcs/issues) for the active RFC's, and see [our roadmap](roadmap.md).
+
+## Background
+
 **What**: Ideas and projects of the TaskCluster Team, in one discoverable place.
 
 **Why**: This repo serves as a place to coordinate design and architecture, so that everyone can participate and past discussions are accessible to everyone.
