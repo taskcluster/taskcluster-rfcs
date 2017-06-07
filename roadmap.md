@@ -61,8 +61,8 @@ use to perform their build, test, and release work.
 ## What We Are Not Planning
 
 The itmes below represent tough decisisions to *not* focus the team's energy on
-a particulra feature, or even to permit designs which would preclude ever
-impelmenting the feature.
+a particular feature, or even to permit designs which would preclude ever
+implementing the feature.
 
  * Strong support for non-Gecko-related or non-Mozilla projects
    * Self-serve support for github projects
