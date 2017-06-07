@@ -23,11 +23,43 @@ The issues are intended to record the discussion on the idea, so that's the righ
 
 As decisions are made, the assignee will update the first comment to represent that consensus.
 
-## I'm Working on This!
+## Let's Decide!
+
+First, once the RFC has a clear proposal in the first comment, label it `Phase: Proposal`.
+
+Now get anybody you know will care about this on-board quickly by contacting
+them by whatever means you want: irc, email, @ mentions should all work well.
+As early as possible, get an email out to the tools-tc list if this is going to
+be something more than a couple specific people care about. Use your best
+judgement.  Give a few days for opinions to filter in. Respond promptly if
+possible to avoid a confusing conversation but give enough time for people who
+are PTO or busy etc.  The idea here is to work out any disagreement and come to
+a proposal everyone can live with, so modify the proposal as necessary.
+Reaching consensus is unlikely, but compromise is always possible.
+
+When you feel that everyone is on the same page, it's time for the
+final-comment period.  The intent of this phase is to allow someone to speak up
+and say, "uh, no, that's not what I thought we decided as a group" or "I wasn't
+aware of this proposal, that's crazy", so notification should be distributed
+broadly.  The phase should last long enough for everyone to read the summary
+and speak up, taking into account timezones, PTO, and email backlogs - use your
+best judgement.
+
+Update the issue's label to `Phase: Final Comment` and send a note summarizing
+the proposal and indicating the duration for comments to the tools-taskcluster
+list, or to some other appropriate venue.
+
+When the final comment period has expired, if there have been no objections,
+mark the issue as `Phase: Decided`.  Note that it's OK to have decided RFCs
+which aren't being actively worked on.
+
+## Let's Do It!
 
 Assign the issue to yourself, and to any others working on with you.
 Update the first comment in the issue to point to any related tracking stuff - bugs, repos, etherpads, gists, whatever.
 There's no need to track status in the issue, as long as someone interested can find out by looking at the links.
+
+When the implementation is complete, close the RFC.
 
 ## Labels
 
