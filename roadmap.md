@@ -64,10 +64,7 @@ The itmes below represent tough decisisions to *not* focus the team's energy on
 a particular feature, or even to permit designs which would preclude ever
 implementing the feature.
 
- * Strong support for non-Gecko-related or non-Mozilla projects
-   * Self-serve support for github projects
-   * Quick-start decision task templates (but note that projects can already create their own decision tasks)
-   * Substantial new taskcluster-github features
+ * Support for non-Mozilla usage - Taskcluster exists to serve Mozilla's needs
  * "Redeployability" (r14y) meaning that Taskcluster could be successfully deployed and operated outside of the Firefox organization
    * (but note "limited redeployability" above)
  * Accounts - explicit administrative domains with "root" access available in each account (similar to AWS accounts)
