@@ -1,28 +1,26 @@
 # Taskcluster Roadmap
 
-The next leg of our journey is to what we are calling "Taskcluster 1.0",
-meaning a service that is complete and ready for use.
+Where are we headed?
+
+Broadly:
+
+ * [Taskcluster-1.0](#taskcluster-10) - a clean, stable base on which to build Mozilla's automation
+ * [Taskcluster as a Service](#taskcluster-as-a-service) - strong self-serve support, and enough power and flexibility to support a wide variety of projects now and into the future
+ * [In-Tree Images](#in-tree-images) - support for projects to precisely define their execution environment, across operating systems
+ * [Gecko Productivity](#gecko-productivity) - improvements within Gecko to improve developer productivity
 
 ## Taskcluster 1.0
 
 Like many projects, Taskcluster began as an experiment and quickly grew into an
 important piece of Mozilla's infrastructure. The 1.0 effort aims to clean up
-some leftovers from that growth process and fully realize some of the benefits
-of Taskcluster's approach.
+some rough edges from that growth process and build a stable platform on which
+others can confidently base their automation.
 
-### Gecko
+### Gecko Migration
 
-While taskcluster is designed as a general tool, its primary customer is Gecko.
-
- * Taskcluster Migration -- migrating from Buildbot to Taskcluster
- * Improve the user experience for developers
-   * Treeherder integrations, actions, etc.
-   * Task and task-group exploration
- * In-Tree Images for All Platforms -- expand the support we have for defining Linux environments in-tree to cover OS X and Windows
-   * Replace all uses of Generic-Worker with Taskcluster-Worker
- * Parameterized in-tree action task definitions
- * Smart optimization of in-tree taskgraphs (avoiding running unnecessary tasks)
- * Better interface for try (better way to specify expected tasks and/or better discovery of required tasks)
+We must finish the Taskcluster migration. Supporting both Buildbot and
+Taskcluster within automation is a substantial drag on agility and
+productivity, and is costly in its resource consumption.
 
 ### Sunsetting Deprecated Features
 
@@ -33,8 +31,8 @@ and cost.
  * taskcluster-scheduler
  * [mozilla-taskcluster](https://github.com/taskcluster/taskcluster-rfcs/issues/42)
  * [gaia-taskcluster](https://github.com/taskcluster/taskcluster-rfcs/issues/44)
- * old `createTask` without priority
  * API methods marked deprecated
+   * old `createTask` without priority
  * [taskcluster-vcs](https://github.com/taskcluster/taskcluster-rfcs/issues/43)
  * InfluxDB
  * Docker images on quay.io and docker cloud
@@ -50,15 +48,30 @@ Of course, these will be made carefully with a migration plan in place!
  * [New artifact API](https://github.com/taskcluster/taskcluster-rfcs/issues/7)
  * [Limited redeployability](https://github.com/taskcluster/taskcluster-rfcs/issues/13) ("limited' meaning that it's suitable for creating development and staging environments, but does not support more than one active production environment)
 
-### Taskcluster As A Service (TCaaS)
+## Taskcluster As A Service
 
 We want to position Taskcluster as a service which Gecko and related projects
 use to perform their build, test, and release work.
 
  * Improved self-serve, reducing cases where Taskcluster team members must be involved to make a change (especially around roles and scopes)
  * Improved reliability and usability for taskcluster-github
+ * Improved operational support, providing a reliable platform for others building production automation
 
-## What We Are Not Planning
+## In-Tree Images
+
+ * In-Tree Images for All Platforms -- expand the support we have for defining Linux environments in-tree to cover OS X and Windows
+   * Replace all uses of Generic-Worker with Taskcluster-Worker
+
+## Gecko Productivity
+
+ * Improve the user experience for developers
+   * Treeherder integrations, actions, etc.
+   * Task and task-group exploration
+ * Parameterized in-tree action task definitions
+ * Smart optimization of in-tree taskgraphs (avoiding running unnecessary tasks)
+ * Better interface for try (better way to specify expected tasks and/or better discovery of required tasks)
+
+# What We Are Not Planning
 
 The itmes below represent tough decisisions to *not* focus the team's energy on
 a particular feature, or even to permit designs which would preclude ever
