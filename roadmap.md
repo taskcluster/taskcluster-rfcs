@@ -43,7 +43,6 @@ and cost.
  * use of static pulse credentials ([use tc-pulse instead](https://github.com/taskcluster/taskcluster-rfcs/issues/20))
  * use of static AWS credentials (only used for [uploads to schemas / references](https://github.com/taskcluster/taskcluster-rfcs/issues/19))
 
-
 ### Breaking Changes
 
 While making breaking changes is always painful, it will be less painful now
@@ -52,7 +51,6 @@ Of course, these will be made carefully with a migration plan in place!
 
  * [New index model](https://github.com/taskcluster/taskcluster-rfcs/issues/30)
  * [New artifact API](https://github.com/taskcluster/taskcluster-rfcs/issues/7)
- * [Limited redeployability](https://github.com/taskcluster/taskcluster-rfcs/issues/13) ("limited' meaning that it's suitable for creating development and staging environments, but does not support more than one active production environment)
  * [Make AWS provisioner worker type definitions public](https://bugzilla.mozilla.org/show_bug.cgi?id=1375155)
 
 ## Taskcluster As A Service
@@ -63,6 +61,7 @@ use to perform their build, test, and release work.
  * Improved self-serve, reducing cases where Taskcluster team members must be involved to make a change (especially around roles and scopes)
  * Improved reliability and usability for taskcluster-github
  * Improved operational support, providing a reliable platform for others building production automation
+ * Unification of tools and docs with a design optimized to users' needs
 
 ## In-Tree Images
 
@@ -75,11 +74,15 @@ This will also involve a consolidation of the wide array of worker
 implementations we provide (taskcluster-worker, docker-worker and
 generic-worker) into just one (taskcluster-worker).
 
+ * [packet.net/QEMU runs to support docker image builds](https://github.com/taskcluster/taskcluster-rfcs/issues/11)
+ * [generic-provisioner prototype for packet.net](https://github.com/taskcluster/taskcluster-rfcs/issues/31) 
+ * HP Moonshot hardware set up to support use of images on hardware
+
 ## Gecko Productivity
 
  * Improve the user experience for developers
    * Treeherder integrations, actions, etc.
-   * Task and task-group exploration
+   * [Task and task-group exploration](https://github.com/taskcluster/taskcluster-rfcs/issues/5)
  * Parameterized in-tree action task definitions
  * Smart optimization of in-tree taskgraphs (avoiding running unnecessary tasks)
  * Better interface for try (better way to specify expected tasks and/or better discovery of required tasks)
