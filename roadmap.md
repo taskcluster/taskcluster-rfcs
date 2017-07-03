@@ -22,6 +22,12 @@ We must finish the Taskcluster migration. Supporting both Buildbot and
 Taskcluster within automation is a substantial drag on agility and
 productivity, and is costly in its resource consumption.
 
+The remaining bits of the migration include:
+ * Porting Windows tests to run natively in Taskcluster
+ * Porting Windows and Linux tasks that must run on hardware (Talos, etc.) to run natively in Taskcluster
+ * Release mechanics (signing, l10n, repacking, beet-moving, balrog updates, etc.)
+ * [Improved support for monitoring and managing workers](https://github.com/taskcluster/taskcluster-rfcs/issues/74)
+
 ### [Sunsetting](https://github.com/taskcluster/taskcluster-rfcs/issues?q=is%3Aopen+is%3Aissue+label%3Aktlo) Deprecated Features
 
 We have built some features and services which have been superseded by better
