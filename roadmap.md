@@ -22,17 +22,16 @@ We must finish the Taskcluster migration. Supporting both Buildbot and
 Taskcluster within automation is a substantial drag on agility and
 productivity, and is costly in its resource consumption.
 
-### Sunsetting Deprecated Features
+### [Sunsetting](https://github.com/taskcluster/taskcluster-rfcs/issues?q=is%3Aopen+is%3Aissue+label%3Aktlo) Deprecated Features
 
 We have built some features and services which have been superseded by better
 implementations. We will work to remove the old offerings to reduce complexity
 and cost.
 
- * taskcluster-scheduler
+ * [taskcluster-scheduler](https://github.com/taskcluster/taskcluster-rfcs/issues/76)
  * [mozilla-taskcluster](https://github.com/taskcluster/taskcluster-rfcs/issues/42)
  * [gaia-taskcluster](https://github.com/taskcluster/taskcluster-rfcs/issues/44)
- * API methods marked deprecated
-   * old `createTask` without priority
+ * [API methods marked deprecated](https://github.com/taskcluster/taskcluster-rfcs/issues/77)
  * [taskcluster-vcs](https://github.com/taskcluster/taskcluster-rfcs/issues/43)
  * InfluxDB
  * Docker images on quay.io and docker cloud
