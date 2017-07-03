@@ -34,6 +34,9 @@ and cost.
  * [API methods marked deprecated](https://github.com/taskcluster/taskcluster-rfcs/issues/77)
  * [taskcluster-vcs](https://github.com/taskcluster/taskcluster-rfcs/issues/43)
  * Docker images on quay.io and docker cloud
+ * use of static pulse credentials ([use tc-pulse instead](https://github.com/taskcluster/taskcluster-rfcs/issues/20))
+ * use of static AWS credentials (only used for [uploads to schemas / references](https://github.com/taskcluster/taskcluster-rfcs/issues/19))
+
 
 ### Breaking Changes
 
@@ -44,6 +47,7 @@ Of course, these will be made carefully with a migration plan in place!
  * [New index model](https://github.com/taskcluster/taskcluster-rfcs/issues/30)
  * [New artifact API](https://github.com/taskcluster/taskcluster-rfcs/issues/7)
  * [Limited redeployability](https://github.com/taskcluster/taskcluster-rfcs/issues/13) ("limited' meaning that it's suitable for creating development and staging environments, but does not support more than one active production environment)
+ * [Make AWS provisioner worker type definitions public](https://bugzilla.mozilla.org/show_bug.cgi?id=1375155)
 
 ## Taskcluster As A Service
 
