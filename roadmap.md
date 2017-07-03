@@ -33,9 +33,7 @@ and cost.
  * [gaia-taskcluster](https://github.com/taskcluster/taskcluster-rfcs/issues/44)
  * [API methods marked deprecated](https://github.com/taskcluster/taskcluster-rfcs/issues/77)
  * [taskcluster-vcs](https://github.com/taskcluster/taskcluster-rfcs/issues/43)
- * InfluxDB
  * Docker images on quay.io and docker cloud
- * Docker-worker in favor of Taskcluster-Worker's Docker Engine
 
 ### Breaking Changes
 
@@ -58,8 +56,14 @@ use to perform their build, test, and release work.
 
 ## In-Tree Images
 
- * In-Tree Images for All Platforms -- expand the support we have for defining Linux environments in-tree to cover OS X and Windows
-   * Replace all uses of Generic-Worker with Taskcluster-Worker
+In-Tree images -- the ability to describe a task's execution environment within
+the source code itself -- is one of Taskcluster's most powerful features. We
+currently support it only for docker-worker (Linux).  We would like to support
+it for all platforms.
+
+This will also involve a consolidation of the wide array of worker
+implementations we provide (taskcluster-worker, docker-worker and
+generic-worker) into just one (taskcluster-worker).
 
 ## Gecko Productivity
 
