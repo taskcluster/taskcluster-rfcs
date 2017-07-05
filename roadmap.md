@@ -23,8 +23,8 @@ Taskcluster within automation is a substantial drag on agility and
 productivity, and is costly in its resource consumption.
 
 The remaining bits of the migration include:
- * Porting Windows tests to run natively in Taskcluster
- * Porting Windows and Linux tasks that must run on hardware (Talos, etc.) to run natively in Taskcluster
+ * Run Windows 7 tests at tier 1
+ * Run Windows and Linux tasks that must run on hardware (Talos, etc.) natively in Taskcluster at Tier 1 (requires new hardware)
  * Release mechanics (signing, l10n, repacking, beet-moving, balrog updates, etc.)
  * [Improved support for monitoring and managing workers](https://github.com/taskcluster/taskcluster-rfcs/issues/74)
 
@@ -51,7 +51,6 @@ Of course, these will be made carefully with a migration plan in place!
 
  * [New index model](https://github.com/taskcluster/taskcluster-rfcs/issues/30)
  * [New artifact API](https://github.com/taskcluster/taskcluster-rfcs/issues/7)
- * [Make AWS provisioner worker type definitions public](https://bugzilla.mozilla.org/show_bug.cgi?id=1375155)
 
 ## Taskcluster As A Service
 
