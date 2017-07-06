@@ -64,7 +64,7 @@ async function main() {
       let pattern = new RegExp('[' + c + ']', 'g');
       fixedtitle = fixedtitle.replace(pattern, '_');
     }
-    let filename = `${timestamp} ${fixedtitle}.txt`
+    let filename = `${timestamp} ${fixedtitle}.md`
     let comments = await getCommentsForIssue({owner, repo, number});
 
     labels = labels.map(x => x.name);
@@ -113,11 +113,13 @@ async function main() {
      * What we should consider:
      * 
      *  1. Make the issue body (e.g. first comment) the sole contents of the file
-     *  2. create a git branch which adds the file and push it
+     *  2. Create a git branch which adds the file and push it
      *  3. Open a PR using the same title
      *  4. Mark the PR with the same labels that the issue had
-     *  5. instead of adding comments to the file, make a comment in the PR with
+     *  5. Instead of adding comments to the file, make a comment in the PR with
      *     attribution and a link to the original comment
+     *  6. Close the github issue corresponding to the new PR with a comment redirecting
+     *     the reader
      */
   }
 }
