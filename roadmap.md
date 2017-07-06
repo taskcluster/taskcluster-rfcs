@@ -22,21 +22,26 @@ We must finish the Taskcluster migration. Supporting both Buildbot and
 Taskcluster within automation is a substantial drag on agility and
 productivity, and is costly in its resource consumption.
 
-### Sunsetting Deprecated Features
+The remaining bits of the migration include:
+ * Run Windows 7 tests at tier 1
+ * Run Windows and Linux tasks that must run on hardware (Talos, etc.) natively in Taskcluster at Tier 1 (requires new hardware)
+ * Release mechanics (signing, l10n, repacking, beet-moving, balrog updates, etc.)
+ * [Improved support for monitoring and managing workers](https://github.com/taskcluster/taskcluster-rfcs/issues/74)
+
+### [Sunsetting](https://github.com/taskcluster/taskcluster-rfcs/issues?q=is%3Aopen+is%3Aissue+label%3Aktlo) Deprecated Features
 
 We have built some features and services which have been superseded by better
 implementations. We will work to remove the old offerings to reduce complexity
 and cost.
 
- * taskcluster-scheduler
+ * [taskcluster-scheduler](https://github.com/taskcluster/taskcluster-rfcs/issues/76)
  * [mozilla-taskcluster](https://github.com/taskcluster/taskcluster-rfcs/issues/42)
  * [gaia-taskcluster](https://github.com/taskcluster/taskcluster-rfcs/issues/44)
- * API methods marked deprecated
-   * old `createTask` without priority
+ * [API methods marked deprecated](https://github.com/taskcluster/taskcluster-rfcs/issues/77)
  * [taskcluster-vcs](https://github.com/taskcluster/taskcluster-rfcs/issues/43)
- * InfluxDB
  * Docker images on quay.io and docker cloud
- * Docker-worker in favor of Taskcluster-Worker's Docker Engine
+ * use of static pulse credentials ([use tc-pulse instead](https://github.com/taskcluster/taskcluster-rfcs/issues/20))
+ * use of static AWS credentials (only used for [uploads to schemas / references](https://github.com/taskcluster/taskcluster-rfcs/issues/19))
 
 ### Breaking Changes
 
@@ -46,7 +51,6 @@ Of course, these will be made carefully with a migration plan in place!
 
  * [New index model](https://github.com/taskcluster/taskcluster-rfcs/issues/30)
  * [New artifact API](https://github.com/taskcluster/taskcluster-rfcs/issues/7)
- * [Limited redeployability](https://github.com/taskcluster/taskcluster-rfcs/issues/13) ("limited' meaning that it's suitable for creating development and staging environments, but does not support more than one active production environment)
 
 ## Taskcluster As A Service
 
@@ -56,17 +60,28 @@ use to perform their build, test, and release work.
  * Improved self-serve, reducing cases where Taskcluster team members must be involved to make a change (especially around roles and scopes)
  * Improved reliability and usability for taskcluster-github
  * Improved operational support, providing a reliable platform for others building production automation
+ * Unification of tools and docs with a design optimized to users' needs
 
 ## In-Tree Images
 
- * In-Tree Images for All Platforms -- expand the support we have for defining Linux environments in-tree to cover OS X and Windows
-   * Replace all uses of Generic-Worker with Taskcluster-Worker
+In-Tree images -- the ability to describe a task's execution environment within
+the source code itself -- is one of Taskcluster's most powerful features. We
+currently support it only for docker-worker (Linux).  We would like to support
+it for all platforms.
+
+This will also involve a consolidation of the wide array of worker
+implementations we provide (taskcluster-worker, docker-worker and
+generic-worker) into just one (taskcluster-worker).
+
+ * [packet.net/QEMU runs to support docker image builds](https://github.com/taskcluster/taskcluster-rfcs/issues/11)
+ * [generic-provisioner prototype for packet.net](https://github.com/taskcluster/taskcluster-rfcs/issues/31) 
+ * HP Moonshot hardware set up to support use of images on hardware
 
 ## Gecko Productivity
 
  * Improve the user experience for developers
    * Treeherder integrations, actions, etc.
-   * Task and task-group exploration
+   * [Task and task-group exploration](https://github.com/taskcluster/taskcluster-rfcs/issues/5)
  * Parameterized in-tree action task definitions
  * Smart optimization of in-tree taskgraphs (avoiding running unnecessary tasks)
  * Better interface for try (better way to specify expected tasks and/or better discovery of required tasks)
