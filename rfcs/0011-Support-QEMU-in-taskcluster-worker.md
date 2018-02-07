@@ -2,7 +2,10 @@
 * Comments: [#11](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/11)
 * Initially Proposed by: @djmitche
 
-# Proposal
+# Summary
+
 Build support for running tasks in QEMU in taskcluster-worker.
 
-This may require setting up a packet.net provisioner?
+# Details
+
+This will require setting up a packet.net provisioner.
