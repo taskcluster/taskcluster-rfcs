@@ -2,12 +2,15 @@
 * Comments: [#20](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/20)
 * Initially Proposed by: @djmitche
 
-
-# Problem
+# Summary
 
 We currently configure pulse credentials in each of our services manually - creating a new user in pulseguardian and manually adding the username / password to the service configuration.
 
-# Proposal
+## Motivation
+
+In a redeployability scenario, that's a lot of manual configuration of credentials for different services, and differs from how we handle other types of credentials.
+
+# Details
 
 Handle pulse credentials the same way we do AWS, Azure, Sentry, and Statsum credentials: services use TC credentials to request temporary pulse credentials.
 
