@@ -2,10 +2,21 @@
 * Comments: [#100](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/100)
 * Initially Proposed by: @jonasfj
 
-# Proposal
-This might not be the sudo-like solution we're looking for. But it's simple and plausibly useful for protecting scopes where LDAP/auth0/duo isn't sufficient.
+# Summary
 
-API
+Taskcluster-TOTP would use TOTP (the usual six-digit time-dependent 2FA code)
+to allow access to privileged scopes.
+
+## Motivation
+
+This might not be the sudo-like solution we're looking for. But it's simple and
+plausibly useful for protecting scopes where LDAP/auth0/duo isn't sufficient.
+
+This came up in discussions of Taskcluster's security posture.
+
+# Details
+
+API:
 ```
 GET /v1/device      // enroll a new device
 response: {
@@ -32,7 +43,11 @@ Notice that this service only needs the scope `assume:totp:*`, no database or st
 
 **limitation**, this means that `totp:*` is needed for setting up this thing.. and that protected scopes can't be passed to other groups... On the upside that's kind of the whole point. You protect the scopes bound to the role `assume:totp:<deviceId>` to a specific TOTP device.
 
----
 IMO, this only really useful for the few cases where LDAP/tc-login should not be a trust point.
 
 Given that it's potentially a super simple service, I think this is something we can try out, if we feel like playing around some rainy day.
+
+# Open Questions
+
+* What are the benefits here?
+* How would this be used?
