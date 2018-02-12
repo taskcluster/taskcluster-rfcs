@@ -1,7 +1,11 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/taskcluster/taskcluster-rfcs.png?columns=all)](https://waffle.io/taskcluster/taskcluster-rfcs?utm_source=badge)
 # TaskCluster RFCs
 
-Please see the [issue list](https://github.com/taskcluster/taskcluster-rfcs/issues) for the active RFC's, and see [our roadmap](roadmap.md).
+* [Issues](https://github.com/taskcluster/taskcluster-rfcs/issues) are RFCs in development, not yet in the proposal stage;
+* [pull requests](https://github.com/taskcluster/taskcluster-rfcs/pulls) contain proposed RFCs; and
+* [the repo](rfcs/) holds RFCs on which we have reached consensus.
+
+See [our roadmap](roadmap.md) for a more general idea of where we are headed.
 
 ## Background
 
