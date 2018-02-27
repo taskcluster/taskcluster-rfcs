@@ -27,4 +27,4 @@ Scopes for these workerTypes would be given to `assume:repo:*`.  Since the tasks
 
 ## Implementation
 
-The new workers would be implemented in a very simple, single-instance service called "taskcluster-built-in-workers" that simultaneously polls all of the given workerTypes.
+* https://bugzilla.mozilla.org/show_bug.cgi?id=1441625
