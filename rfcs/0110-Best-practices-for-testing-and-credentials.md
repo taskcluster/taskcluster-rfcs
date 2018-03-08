@@ -42,6 +42,15 @@ Once those best practices and libraries are done, the work that would remain is 
 Tests should be capable of fetching credentials needed to access external services either from an on-disk file (for local development) or the Taskcluster-Secrets service vi Taskcluster-Proxy (for use in CI).
 It should be easy to tell if a specific kind of credential (for example, pulse or AWS) is available.
 
+#### Getting Credentials
+
+Team members and dedicated contributors will want to know how to set up a full set of credentials for themselves.
+Include a section in the README describing how to find or generate credentials for each service.
+
+For Taskcluster credentials, put the necessary scopes in `scopes.txt` and suggest that the user use taskcluster-cli to generate the credentials:
+
+> To obtain Taskcluster client credentials, run `eval $(cat scopes.txt | xargs taskcluster-cli signin)`. This will open a web browser and you'll be prompted to log into Taskcluster. This command requires the taskcluster-cli Go application. Find one at https://github.com/taskcluster/taskcluster-cli/releases.
+
 #### Hard Dependencies
 
 Some services and libraries depend completely on external services.
