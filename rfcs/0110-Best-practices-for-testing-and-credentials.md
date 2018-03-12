@@ -82,7 +82,7 @@ Any additional diagnostic output should be handled with debug logging or otherwi
 
 Tests should run in Taskcluster (via Taskcluster-Github) against both pull requests and pushes to the master branch.
 
-The master branch should be configured with access to a full complement of creentials, so that it can run all tests.
+The master branch should be configured with access to a full complement of credentials, so that it can run all tests.
 Depending on the sensitivity of the credentials, pull requests may have access to none, some, or all of the credentials.
 For example, Taskcluster credentials granting access only to create tasks in a testing workerType, with no attached workers, are safe to expose to pull requests; AWS credentials are not.
 
