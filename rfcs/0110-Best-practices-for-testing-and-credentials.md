@@ -4,7 +4,7 @@
 
 # Summary
 
-Taskcluster repositories should pass their tests "out of the box": `git clone`, `yarn`, and `yarn test` should result in a successful test run.
+Taskcluster repositories should pass their tests "out of the box": `git clone`, `yarn install --frozen-lockfile`, and `yarn test` should result in a successful test run.
 
 This is simple for test suites that do not require credentials [1].
 Otherwise, we must find a way to give useful test results when no credentials are available, while ensuring that all tests get run before code goes into production.
@@ -37,6 +37,10 @@ Once those best practices and libraries are done, the work that would remain is 
 
 ## Best Practices (outline)
 
+### Installation
+
+Services with a lockfile should suggest that contributors run `yarn install --frozen-lockfile`, while libraries should use `yarn`; after that, run `yarn test`.
+
 ### Credential Management
 
 Tests should be capable of fetching credentials needed to access external services either from an on-disk file (for local development) or the Taskcluster-Secrets service vi Taskcluster-Proxy (for use in CI).
@@ -47,9 +51,8 @@ It should be easy to tell if a specific kind of credential (for example, pulse o
 Team members and dedicated contributors will want to know how to set up a full set of credentials for themselves.
 Include a section in the README describing how to find or generate credentials for each service.
 
-For Taskcluster credentials, put the necessary scopes in `scopes.txt` and suggest that the user use taskcluster-cli to generate the credentials:
-
-> To obtain Taskcluster client credentials, run `eval $(cat scopes.txt | xargs taskcluster-cli signin)`. This will open a web browser and you'll be prompted to log into Taskcluster. This command requires the taskcluster-cli Go application. Find one at https://github.com/taskcluster/taskcluster-cli/releases.
+For Taskcluster credentials, include the necessary credentials in a role named `project:taskcluster:tests:<projectName>` (e.g., `project:taskcluster:tests:taskcluster-queue`).
+Then instruct users to run `eval $(taskcluster-cli signin --scopes assume:project:taskcluster:tests:$PROJECT)` to get the scopes to run the tests, noting that they must themselves have the given role or this won't work.
 
 #### Hard Dependencies
 
