@@ -57,7 +57,8 @@ to allow someone to speak up and say, "uh, no, that's not what I thought we
 decided as a group" or "I wasn't aware of this proposal, that's crazy", so
 notification should be distributed broadly.  The phase should last long enough
 for everyone to read the summary and speak up, taking into account timezones,
-PTO, and email backlogs - use your best judgement.
+PTO, and email backlogs - use your best judgement.  This should be at least 24
+hours so that everyone has working-hours to think and respond.
 
 Update the issue's label to `Phase: Final Comment` and send a note summarizing
 the proposal and indicating the duration for comments to the tools-taskcluster
