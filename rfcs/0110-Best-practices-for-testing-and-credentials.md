@@ -99,4 +99,4 @@ No amount of automation can substitute for careful thought and manual pre- and p
 
 # Implementation
 
-TBD
+* [[RFC 0110] Implement testing best-practices](https://bugzilla.mozilla.org/show_bug.cgi?id=1446966)
