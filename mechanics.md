@@ -25,7 +25,7 @@ As decisions are made, the assignee will update the first comment to represent t
 
 ### Write a Proposal
 
-* Copy `[template.txt](template.txt)` to `rfcs/1234-rfc-title.md` where `1234` is
+* Copy [`template.txt`](template.txt) to `rfcs/1234-rfc-title.md` where `1234` is
   the issue number (padded to four digits with zeroes).  Edit the file to fill in
   the necessary information, including the issue number, and commit it to a
   branch.
