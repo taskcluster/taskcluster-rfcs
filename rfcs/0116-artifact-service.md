@@ -1,56 +1,59 @@
-# RFC 116 Artifact Service
+# RFC 116 object Service
 * Comments: [#116](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/116)
 * Proposed by: @jhford
 
 # Summary
 
-Taskcluster tasks often produce Artifacts during the course of being run.
-Examples include browser archives, json metadata and log files.  We currently
-store Artifacts in a single region of S3 and split management of Artifacts
-between the Queue and Cloud Mirror.  This project is to take Artifact handling
-out of the Queue and into its own service that takes over the responsibilities
-for cross-region and cross-cloud replication.
+Taskcluster tasks often produce artifacts during the course of being run.
+Examples include browser distribution archives, json metadata and log files.
+We currently store artifacts in a single region of S3 and split management of
+artifacts between the Queue and Cloud Mirror.  This project is to design an
+object storage api which drastically simplifies the management of objects from
+the Queue's perspective while at the same time handling the cross-region
+replication and cache management of Cloud Mirror as well as enabling
+cross-cloud support.
 
-The Artifact service should not be directly exposed to end users as a Rest API.
+The object service should not be directly exposed to end users as a Rest API.
 It will instead be a generalised API that the Queue uses to facilitate artifact
 creation from tasks.  In other words, the Queue gates operations to the
-Artifact service.  The service will be exposed to endusers by means of a `Location`
-header value on a `300` series redirect.
+object service.  The service will be exposed to endusers by means of a `Location`
+header value on a `300` series redirect or by relaying responses.
 
-The Queue will now store only the name of Artifacts and would treat the name of
-an Artifact as an opaque identifier and defer all management of the actual
-bytes to this system.  The Queue would also stop doing IP to Object store
+The Queue will now store only the name of objects and would treat the name of
+an object as an opaque identifier and defer all management of the actual
+bytes to this system.  The Queue would also stop doing IP to object store
 mappings.
 
-This RFC is to decide on what the Artifacts service is and its interface, not
-implementation details
+This RFC is to decide on what the objects service is and its interface, not
+implementation details.
 
 ## Motivation
 
 * We want the Queue to be easier to understand, develop and maintain
-* We want Artifacts to be easier to understand, develop and maintain
-* We want better Artifact handling without increasing complexity of the Queue
+* We want objects to be easier to understand, develop and maintain
+* We want better object handling without increasing complexity of the Queue
   codebase
 * We want to have more clear responsibilities for our services
-* We want to consolidate the handling of Artifacts into a single service
+* We want to consolidate the handling of objects into a single service
 * We want to build generalised software when possible as participants of a free
   software community
 
 # Details
 
-* Auth might not be done with scopes and tc-auth, but a shared secret between
-  Queue and Artifacts
+* Auth will not be done with scopes and tc-auth, but a shared secret between
+  Queue and objects, with JWT being a possibility
 * The Queue will block new artifacts after task resolution by not issuing new
-  signed urls
-* Data storage in Artifacts will be done with Postgres and not Azure Table
+  signed urls to this service
+* Data storage in objects will be done with Postgres and not Azure Table
   Storage
-* We do not intend to have an operation to list artifacts in the API
-* The redirecting logic of the Artifact service will adhere to the HTTP spec
+* We do not intend to have an operation to list objects in the API
+* The redirecting logic of the object service will adhere to the HTTP spec
   using 300-series redirects where possible
-* Where content-negotiation is impossible, the service will block creation of
-  artifacts when incoming requests aren't compatible with required response
-* We will support uploading artifacts to different regions so that we can
-  minimize interregion transfer costs for initial object creation
+* Where content-negotiation is impossible, the service will block retreival or
+  creation of artifacts when incoming requests aren't compatible with required
+  response
+* We will support uploading artifacts to different regions and services so that
+  we can minimize interregion transfer costs for initial object creation
 
 ## API
 This API is up for debate and is only an illustrative starting point.  
@@ -95,8 +98,8 @@ Where present, the `origin` rest parameter in this service for will be either
 an IPv4 address, IPv6 address, or an identifier.  This parameter will specify
 the source location of the ultimately originating request.  This means the
 origin of the request to the Queue from the worker and not the request to the
-artifact service.  If the origin is an IPv4 or IPv6, a mapping of the address
-and IP will occur to find the backing storage.  If the origin is not an IPv4 or
+object service.  If the origin is an IPv4 or IPv6, a mapping of the address and
+IP will occur to find the backing storage.  If the origin is not an IPv4 or
 IPv6 address and is identical to a set of known and mappable identifiers (e.g.
 `s3_us-west-2`), then that will be used to map the token to find the backing
 storage.
@@ -109,7 +112,7 @@ PATCH /artifacts/:name
 ```
 
 The `PUT` endpoint will take an origin and name.  It will return a `200` with a
-document which contains a list of generalised requests which could be run to
+document that contains a list of generalised requests which could be run to
 complete the actual upload.  Please see the queue's current `blob` storage type
 for an example of this pattern.  The body of the request will contain metadata
 about the artifact in the shape:
@@ -145,10 +148,12 @@ DELETE /caches/artifacts/:name
 
 This service has at least one copy of each stored file.  Any copies above 
 
-Delete all copies of the named Artifact if using first endpoint.  The second
-endpoint would attempt delete all of the cached copies in the various
-locations.  This cache purging must return a `202 Accepted` response and not
-`200/204` due to the nature of how caches work in the real world.
+Delete all stored copies of the named object if using first endpoint.  The
+second endpoint would attempt delete all of the cached copies in the various
+locations.  The cached copies are those copies which are created in other
+regions or services to provide more local copies of each object.  This cache
+purging must return a `202 Accepted` response and not `200/204` due to the
+nature of how caches work in the real world.
 
 ### Retreival
 
@@ -156,7 +161,7 @@ locations.  This cache purging must return a `202 Accepted` response and not
 GET /artifacts/:name[?max_time=30]
 ```
 
-This endpoint returns a 302 redirect to the location of the Artifact which is
+This endpoint returns a 302 redirect to the location of the object which is
 closest to the request's IP address.  If needed, this will initiate a copy from
 the original backing store into a different storage location.  It will wait up
 to a configurable amount of time before redirecting to a non-optimal copy.
@@ -186,7 +191,7 @@ Example inside heroku:
   * We will support pull-through caches the same way we support CDNs by redirecting
     urls.  These might be signed urls, as required by each underlying storage system
   * We will look into Ceph or similar systems
-* What auth scheme will we use between Queue and Artifacts? **Maybe JWT**
+* What auth scheme will we use between Queue and objects? **Maybe JWT**
 * Will we use Content Addressable storage?
   * We like this idea, but we're going to do thinking about it later on since it's not
     required that we tackle this upfront
