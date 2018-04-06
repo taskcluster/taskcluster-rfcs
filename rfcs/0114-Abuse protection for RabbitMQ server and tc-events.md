@@ -19,7 +19,7 @@ rfc-0104
 
 # Details
 
-Nothing in Taskcluster currently assumes that it is using CloudAMQP. Therefore  If we do, it would need to be done in a way where it could be easily disabled.Since taskcluster can be used by some other organization as well where they don't use CloudAMQP
+Nothing in Taskcluster currently assumes that it is using CloudAMQP. Therefore  If we do, it would need to be done in a way where it could be easily disabled. Since taskcluster can be used by some other organization as well where they don't use CloudAMQP
 
 # Open Questions
 
