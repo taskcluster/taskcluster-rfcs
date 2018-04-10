@@ -15,14 +15,13 @@ cross-cloud support.
 
 The object service should not be directly exposed to end users as a Rest API.
 It will instead be a generalised API that the Queue uses to facilitate artifact
-creation from tasks.  In other words, the Queue gates operations to the
-object service.  The service will be exposed to endusers by means of a `Location`
+creation from tasks.  In other words, the Queue gates operations to the object
+service.  The service will be exposed to endusers by means of a `Location`
 header value on a `300` series redirect or by relaying responses.
 
 The Queue will now store only the name of objects and would treat the name of
-an object as an opaque identifier and defer all management of the actual
-bytes to this system.  The Queue would also stop doing IP to object store
-mappings.
+an object as an opaque identifier and defer all management of the actual bytes
+to this system.  The Queue would also stop doing IP to object store mappings.
 
 This RFC is to decide on what the objects service is and its interface, not
 implementation details.
@@ -41,8 +40,8 @@ implementation details.
 # Details
 
 * Auth will not be done with scopes and tc-auth, but a shared secret between
-  Queue and objects, with JWT being a possibility
-* The Queue will block new artifacts after task resolution by not issuing new
+  frontend service and objects, with JWT being a possibility
+* The frontend service will block new artifacts after task resolution by not issuing new
   signed urls to this service
 * Data storage in objects will be done with Postgres and not Azure Table
   Storage
@@ -50,23 +49,43 @@ implementation details.
 * The redirecting logic of the object service will adhere to the HTTP spec
   using 300-series redirects where possible
 * Where content-negotiation is impossible, the service will block retreival or
-  creation of artifacts when incoming requests aren't compatible with required
+  creation of objects when incoming requests aren't compatible with required
   response
-* We will support uploading artifacts to different regions and services so that
+* We will support uploading objects to different regions and services so that
   we can minimize interregion transfer costs for initial object creation
+
+### Content Negitiation
+Some storage providers allow for a specific content-encoding to be set for
+their resources, but do not allow for content negotiation.  An example is S3,
+where you can store objects with an immutable content-encoding value of 'gzip'
+at creation.  All requests will respond with "Content-Encoding: gzip"
+regardless of the "Accept-Encoding" request header value.  The HTTP spec is not
+100% clear on whether or not this is allowed per the spec, so we will ensure
+that only defintely valid requests are processed.
+
+In order to force only valid requests, we will require that any request which
+would result in a forced content-encoding header have a corresponding
+accept-encoding header.  If a request which would be forced to respond with a
+"Content-Encoding: gzip" then only requests with "Accept-Encoding: gzip" (or
+compatible) would succeed.  In this case a 406 Not Acceptable response would be
+given.
+
+This does not implement or intend to implement content-negotiation, instead is
+a system to ensure that only requests which would've negotiated a compatible
+encoding would succeed.
 
 ## API
 This API is up for debate and is only an illustrative starting point.  
 
 ### Generalised request format
 There will be a concept of a generalised HTTP request.  These requests are used
-to transmit metadata of an HTTP request which the artifact service requires the
-client to perform.
+to transmit metadata of an HTTP request which the  service requires the client
+to perform.
 
 An example usage of this format is uploading a file.  The creation endpoint of
 this service will generate all of the HTTP request metadata that the uploading
-worker will use to upload file.  Then the worker will match these HTTP requests
-with payload bodies and run each of these requests.
+process will use to upload file.  Then the uploader will match these HTTP
+requests with payload bodies and run each of these requests.
 
 The motivation for this type of flow is to support the case where the uploader
 is running in a different region than this service is.  If we required all
@@ -94,28 +113,29 @@ A generalised request will look like:
 
 ### Origins
 
-Where present, the `origin` rest parameter in this service for will be either
-an IPv4 address, IPv6 address, or an identifier.  This parameter will specify
-the source location of the ultimately originating request.  This means the
-origin of the request to the Queue from the worker and not the request to the
-object service.  If the origin is an IPv4 or IPv6, a mapping of the address and
-IP will occur to find the backing storage.  If the origin is not an IPv4 or
-IPv6 address and is identical to a set of known and mappable identifiers (e.g.
-`s3_us-west-2`), then that will be used to map the token to find the backing
-storage.
+Where present, the `origin` rest parameter in this service will be either an
+IPv4 address, IPv6 address, or an identifier.  This parameter will specify the
+source location of the ultimately originating request to upload.  If the origin
+is an IPv4 or IPv6, a mapping of the address and IP will occur to find the
+backing storage.  If the origin is not an IPv4 or IPv6 address and is identical
+to a set of known and mappable identifiers (e.g.  `s3_us-west-2`), then that
+will be used to map the token to find the backing storage provider.  If the
+origin is not an IP address and not a configured identifier, an error will be
+sent back to the client.
+
 
 ### Creation
 
 ```
-PUT /artifacts/:name
-PATCH /artifacts/:name
+PUT /objects/:name
+PATCH /objects/:name
 ```
 
 The `PUT` endpoint will take an origin and name.  It will return a `200` with a
 document that contains a list of generalised requests which could be run to
 complete the actual upload.  Please see the queue's current `blob` storage type
 for an example of this pattern.  The body of the request will contain metadata
-about the artifact in the shape:
+about the object in the shape:
 
 ```javascript
 {
@@ -127,6 +147,13 @@ about the artifact in the shape:
   transferSha256: 'abcdef1234',
   contentEncdoing: 
   expiration: new Date(),
+  parts: [{
+    sha256: 'abcd1234',
+    size: 1024,
+  }, {
+    sha256: 'abcd1234',
+    size: 1024,
+  }],
 }
 ```
 
@@ -134,31 +161,91 @@ This endpoint will return a list of HTTP requests which must all be run.
 
 The `PATCH` endpoint will be sent without a request body and will be used to
 perform any post-upload actions.  These include things like the commit step on
-an S3 multipart upload.  This endpoint would be run by the Queue and not by the
-uploader, and the Queue would also need a complimentary method for workers to
-call when they complete the upload.  This is what is currently done with the
-`blob` storage type in the queue.
+an S3 multipart upload.  This endpoint would be run by the frontend service and
+not by the uploader, and the frontend service would also need a complimentary
+method for workers to call when they complete the upload.  This is what is
+currently done with the `blob` storage type in the queue.
+
+The completion endpoint is used to perform any post-upload validation required.
+This might include the "Complete Multipart Upload" for S3 based objects, or
+possible a post-upload hash and verification step for a locally managed file
+server.
+
+Until the completion endpoint is called for a given object, attempts to
+retrieve an object will result in a 404 Not Found response.
+
+Example of a multipart upload using S3 from the object service's perspective.
+This is a simplified view, meant to highlight the key interactions rather than
+every detail.  For the purpose of this example, the uploader speaks directly
+with the object service.  In reality this interaction would have something like
+the Queue as an intermediary between the uploader and the object service.
+
+```
+uploader --> objsvc PUT /objects/abcd123  {
+                                            origin: '10.10.10.10',
+                                            contentType: 'application/json',
+                                            contentLength: 1234,
+                                            contentSha256: 'abcdef1234',
+                                            transferLength: 1234,
+                                            transferSha256: 'abcdef1234',
+                                            contentEncdoing: 
+                                            expiration: new Date(),
+                                            parts: [
+                                              sha256: 'abcd1234',
+                                              size: 1024,
+                                            }, {
+                                              sha256: 'abcd1234',
+                                              size: 1024,
+                                            }],
+                                          }
+objsvc --> s3 POST /object-abcd123?uploads
+objsvc <-- s3 200 UploadId=u-123
+uploader <-- objsvc 200 {requests: [{
+                          url: 'http://s3.com/object-abcd123?partNumber=1&uploadId=u-123',
+                          headers: {authorization: 'signature-request-1'},
+                          method: 'PUT'
+                        }, {
+                          url: 'http://s3.com/object-abcd123?partNumber=2&uploadId=u-123',
+                          headers: {authorization: 'signature-request-1'},
+                          method: 'PUT'
+                        }
+                       ]}
+uploader --> s3 PUT /object-abcd123?partNumber=1&uploadId=u-123'
+uploader <-- s3 200 ETag {etag: 123}
+uploader --> s3 PUT /object-abcd123?partNumber=2&uploadId=u-123'
+uploader <-- s3 200 ETag {etag: 456}
+uploader --> objsvc PATCH /objects/abcd123 {etags: [123, 456]}
+objsvc --> s3 POST /object-abcd123?uploadId=u-123 {etags: [123, 456]}
+objsvc <-- s3 200 ETag {etag: 123456}
+uploader <-- objsvc 200
+```
 
 ### Deletetion
 
 ```
-DELETE /artifacts/:name
-DELETE /caches/artifacts/:name
+DELETE /objects/:name
+DELETE /caches/objects/:name
 ```
 
-This service has at least one copy of each stored file.  Any copies above 
+This service has at least one copy of each stored file.  Any copies stored in
+addition to this original and authoritative copy are considered to be cached
+copies.
 
-Delete all stored copies of the named object if using first endpoint.  The
-second endpoint would attempt delete all of the cached copies in the various
-locations.  The cached copies are those copies which are created in other
-regions or services to provide more local copies of each object.  This cache
-purging must return a `202 Accepted` response and not `200/204` due to the
-nature of how caches work in the real world.
+The first endpoint will delete the original copy of the file as well as
+initiating the deletion of any cached copies.  On success, it will return a 200
+to reflect the success of deleting the original copy.
+
+The second endpoint would attempt delete all of the cached copies in the
+various locations, leaving the original file intact.  The cached copies are
+those copies which are created in other regions or services to provide more
+local copies of each object.  This cache purging must return a `202 Accepted`
+response and not `200/204` due to the nature of how caches work in the real
+world.
 
 ### Retreival
 
 ```
-GET /artifacts/:name[?max_time=30]
+GET /objects/:name[?max_time=30][&origin=s3_us-west-2]
 ```
 
 This endpoint returns a 302 redirect to the location of the object which is
@@ -168,19 +255,23 @@ to a configurable amount of time before redirecting to a non-optimal copy.
 
 In order to support running in environments where requests are limted in time,
 the `max_time` query string option will specify roughly how many seconds the
-client is willing to wait for an artifact.  The default value should be based
-on the size of the artifact.  For example, it will wait 2s for each 100MB of
-artifact size.  While waiting, the service will issue intermediate redirects to
-itself to reduce the waiting time.
+client is willing to wait for an object.  The default value should be based on
+the size of the object.  For example, it will wait 2s for each 100MB of object
+size.  While waiting, the service will issue intermediate redirects to itself
+to reduce the waiting time.
+
+In the case that someone wishes to specify a specific origin for the request,
+as a request to override the automatic IP resolution, the optional
+`origin=<origin>` query parameter can be used.
 
 Example inside heroku:
 ```
-10:00:00 <-- GET /artifacts/my_file?max_time=90
-10:00:25 --> 302 /artifacts/my_file?max_time=65
-10:00:25 <-- GET /artifacts/my_file?max_time=65
-10:00:50 --> 302 /artifacts/my_file?max_time=40
-10:00:50 <-- GET /artifacts/my_file?max_time=40
-10:00:55 --> 302 http://us-west-2.s3.amazonaws/artifacts/my_file
+10:00:00 <-- GET /objects/my_file?max_time=90
+10:00:25 --> 302 /objects/my_file?max_time=65
+10:00:25 <-- GET /objects/my_file?max_time=65
+10:00:50 --> 302 /objects/my_file?max_time=40
+10:00:50 <-- GET /objects/my_file?max_time=40
+10:00:55 --> 302 http://us-west-2.s3.amazonaws/objects/my_file
 ```
 
 # Open Questions
