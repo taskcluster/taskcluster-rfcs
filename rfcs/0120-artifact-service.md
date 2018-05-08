@@ -23,8 +23,13 @@ The Queue will now store only the name of objects and would treat the name of
 an object as an opaque identifier and defer all management of the actual bytes
 to this system.  The Queue would also stop doing IP to object store mappings.
 
-This RFC is to decide on what the objects service is and its interface, not
-implementation details.
+This service coordinates the uploading and downloading of objects stored
+directly from the implementation of the backing service.  This service figures
+out where the best location to store an object is, provides an uploader with
+the signed HTTP requests needed to upload that object and provides downloaders
+the correct URL for downloading, possibly caching the object if needed.
+
+This RFC describes the interface of the Object Service; implementations may vary.
 
 ## Motivation
 
@@ -41,10 +46,8 @@ implementation details.
 
 * Auth will not be done with scopes and tc-auth, but a shared secret between
   frontend service and objects, with JWT being a possibility
-* The frontend service will block new artifacts after task resolution by not issuing new
-  signed urls to this service
-* Data storage in objects will be done with Postgres and not Azure Table
-  Storage
+* The frontend service will block new artifacts after task resolution by not
+  issuing new signed urls to this service
 * We do not intend to have an operation to list objects in the API
 * The redirecting logic of the object service will adhere to the HTTP spec
   using 300-series redirects where possible
@@ -75,11 +78,10 @@ a system to ensure that only requests which would've negotiated a compatible
 encoding would succeed.
 
 ## API
-This API is up for debate and is only an illustrative starting point.  
 
 ### Generalised request format
 There will be a concept of a generalised HTTP request.  These requests are used
-to transmit metadata of an HTTP request which the  service requires the client
+to transmit metadata of an HTTP request which the service requires the client
 to perform.
 
 An example usage of this format is uploading a file.  The creation endpoint of
@@ -107,9 +109,12 @@ A generalised request will look like:
 }
 ```
 
-* The body will not be included, but can be described through HTTP headers in the request
-* Duplicated HTTP headers will be unsupported (i.e. key -> string not key -> list of strings)
-* All query string, path, fragements are contained in a fully formed `url` property
+* The body will not be included, but can be described through HTTP headers in
+  the request
+* Duplicated HTTP headers will be unsupported (i.e. key -> string not key ->
+  list of strings)
+* All query string, path, fragements are contained in a fully formed `url`
+  property
 
 ### Origins
 
@@ -123,6 +128,7 @@ will be used to map the token to find the backing storage provider.  If the
 origin is not an IP address and not a configured identifier, an error will be
 sent back to the client.
 
+The mapping of origins to storage providers should be staticly configured.
 
 ### Creation
 
@@ -174,6 +180,10 @@ server.
 Until the completion endpoint is called for a given object, attempts to
 retrieve an object will result in a 404 Not Found response.
 
+Object creation must be idempotent.  If a call to the creation end point
+happens with equivalent values, the same response body must be returned.  If a
+call is made to the endpoint with conflicting values, an error must be returned
+
 Example of a multipart upload using S3 from the object service's perspective.
 This is a simplified view, meant to highlight the key interactions rather than
 every detail.  For the purpose of this example, the uploader speaks directly
@@ -220,11 +230,80 @@ objsvc <-- s3 200 ETag {etag: 123456}
 uploader <-- objsvc 200
 ```
 
-### Deletetion
+### Part Size
+```
+GET /upload-info
+GET /upload-info/:origin
+```
+
+Multipart uploads in various backing services have differing requirements related
+to the size of each individual part.  This endpoint will return information about
+part sizes for a given origin.  In the case that the origin is not specified, the
+origin of the requester will be used.
+
+The response of this method for an S3 origin will be:
+
+```
+[
+  {
+    type: 'single-part',
+    max_size: 5 * 1024 * 1024,
+    min_size: 0,
+    max_part_count: 1,
+    min_part_count: 1,
+    min_part_size: 5 * 1024 * 1024,
+    max_part_size: 5 * 1024 * 1024,
+    part_size_multiple: 1,
+  },
+  {
+    type: 'multipart',
+    max_size: 5 * 1024 * 1024 * 1024,
+    min_size: 0,
+    max_part_count: 10000,
+    min_part_count: 1,
+    min_part_size: 5 * 1024 * 1024,
+    max_part_size: 5 * 1024 * 1024,
+    part_size_multiple: 1,
+  },
+]
+```
+
+All services will use a shape like this, changing their values to reflect their
+reality.  This format will give the uploader the ability to choose from the
+supported types of uploads.  Only those upload types which work with this
+upload flow will be supported, regardless of whether more options are available
+in the underlying API.
+
+The keys for this response will have the following meaning:
+
+* `type`: an identifier for the style of upload, unique to each underlying
+  service
+* `min`/`max_size`: The size range for the overall object in bytes
+* `min`/`max_part_count`: The range of number of parts allowed
+* `min`/`max_part_size`: The size range for each part in bytes
+* `part_size_multiple`: If a service requires parts be a multiple of a number,
+  this is the value.
+
+The ranges must all work together such that the most strict condition is not
+exceeded.  For example if the maximum number of parts is 10,000 and you want to
+use 5MB parts, you are limited to 5MB * 10,000, not 5TB.
+
+Of note is that the minimum part size is interpreted slightly differently.  In
+order to support last part part sizes which are not the minimum part size, the
+last part may be smaller than the minimum value specified here.
+
+This endpoint provides advisory information and does not obviate the service from
+checking these values to be valid when the object is created.  The object creation
+endpoint must always validate its provided values.
+
+The value of this URL is cachable for at least 30 minutes, which implies that
+origin to backend mapping must be stable for 30 minutes at a time.
+
+### Deletion
 
 ```
 DELETE /objects/:name
-DELETE /caches/objects/:name
+DELETE /caches/:id/objects/:name
 ```
 
 This service has at least one copy of each stored file.  Any copies stored in
@@ -242,7 +321,11 @@ local copies of each object.  This cache purging must return a `202 Accepted`
 response and not `200/204` due to the nature of how caches work in the real
 world.
 
-### Retreival
+The `id` parameter in the second endpoint would specify a specific cache id for
+which the deletion is requested.  A special reserved value `all` would request
+that all non-canonical copies of the object be deleted.
+
+### Retrieval
 
 ```
 GET /objects/:name[?max_time=30][&origin=s3_us-west-2]
@@ -263,6 +346,10 @@ to reduce the waiting time.
 In the case that someone wishes to specify a specific origin for the request,
 as a request to override the automatic IP resolution, the optional
 `origin=<origin>` query parameter can be used.
+
+An object must not be viewable until any post-upload steps which are required
+have occured.  This is to ensure that objects which have not been fully
+completed or had their validation completed are used
 
 Example inside heroku:
 ```
