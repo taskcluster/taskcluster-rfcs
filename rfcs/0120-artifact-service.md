@@ -130,6 +130,9 @@ sent back to the client.
 
 The mapping of origins to storage providers should be statically configured.
 
+The origin `all` is reserved and cannot be used.  This is to enable management
+endpoints to operate on all origins in the future.
+
 ### Creation
 
 ```
@@ -251,27 +254,15 @@ uploader should store a copy of this information to inform future uploads.
 
 ```
 DELETE /objects/:name
-DELETE /caches/:id/objects/:name
 ```
 
 This service has at least one copy of each stored file.  Any copies stored in
 addition to this original and authoritative copy are considered to be cached
 copies.
 
-The first endpoint will delete the original copy of the file as well as
+This endpoint will delete the original copy of the file as well as
 initiating the deletion of any cached copies.  On success, it will return a 200
 to reflect the success of deleting the original copy.
-
-The second endpoint would attempt delete all of the cached copies in the
-various locations, leaving the original file intact.  The cached copies are
-those copies which are created in other regions or services to provide more
-local copies of each object.  This cache purging must return a `202 Accepted`
-response and not `200/204` due to the nature of how caches work in the real
-world.
-
-The `id` parameter in the second endpoint would specify a specific cache id for
-which the deletion is requested.  A special reserved value `all` would request
-that all non-canonical copies of the object be deleted.
 
 ### Retrieval
 
@@ -308,6 +299,41 @@ Example inside heroku:
 10:00:50 <-- GET /objects/my_file?max_time=40
 10:00:55 --> 302 http://us-west-2.s3.amazonaws/objects/my_file
 ```
+
+The origin id chosen by the system will be stored in an HTTP header
+`X-ObjSvc-Cache-Id`
+
+### Cache Management
+```
+GET /caches/
+GET /caches/:id/objects/:name
+DELETE /caches/:id/objects/:name
+```
+
+These endpoints are not intended to be used by general users of this service.
+They are present for maintenance and debugging of the operators.
+
+The first endpoint will list out the cache identifiers which are configured by
+the system.  They will correspond to the same value as the `origin` for that
+specific cache location.
+
+The second endpoint would be used to retrieve an object directly from a
+specific cache, skipping the canonical location.  This endpoint would function
+otherwise identically to the normal retrieval endpoint, except that it will
+return a 404 error if the item is not yet present in the cache.  It will not
+initiate a copy of the object into the cache.
+
+The third endpoint will initiate a deletion of the copy stored in that cache,
+leaving the original file intact.  The cached copies are those copies which are
+created in other regions or services to provide more local copies of each
+object.  This cache purging must return a `202 Accepted` response when purging
+of the cache cannot be completed by the time the response is sent.  If the
+cache is able to purge the object and verify that the purge is complete, a `200
+OK` response is appropriate.
+
+In order to purge all caches, a special reserved cache id `all` would be used
+that purges all non-canonical copies of the object.  This also implies that the
+origin `all` is also reserved
 
 # Security
 This service will use [JWT](https://tools.ietf.org/html/rfc7519) (Json Web
