@@ -16,7 +16,7 @@ cross-cloud support.
 The object service should not be directly exposed to end users as a Rest API.
 It will instead be a generalised API that the Queue uses to facilitate artifact
 creation from tasks.  In other words, the Queue gates operations to the object
-service.  The service will be exposed to endusers by means of a `Location`
+service.  The service will be exposed to end users by means of a `Location`
 header value on a `300` series redirect or by relaying responses.
 
 The Queue will now store only the name of objects and would treat the name of
@@ -51,20 +51,20 @@ This RFC describes the interface of the Object Service; implementations may vary
 * We do not intend to have an operation to list objects in the API
 * The redirecting logic of the object service will adhere to the HTTP spec
   using 300-series redirects where possible
-* Where content-negotiation is impossible, the service will block retreival or
+* Where content-negotiation is impossible, the service will block retrieval or
   creation of objects when incoming requests aren't compatible with required
   response
 * We will support uploading objects to different regions and services so that
-  we can minimize interregion transfer costs for initial object creation
+  we can minimize inter-region transfer costs for initial object creation
 
-### Content Negitiation
+### Content Negotiation
 Some storage providers allow for a specific content-encoding to be set for
 their resources, but do not allow for content negotiation.  An example is S3,
 where you can store objects with an immutable content-encoding value of 'gzip'
 at creation.  All requests will respond with "Content-Encoding: gzip"
 regardless of the "Accept-Encoding" request header value.  The HTTP spec is not
 100% clear on whether or not this is allowed per the spec, so we will ensure
-that only defintely valid requests are processed.
+that only definitely valid requests are processed.
 
 In order to force only valid requests, we will require that any request which
 would result in a forced content-encoding header have a corresponding
@@ -92,7 +92,7 @@ requests with payload bodies and run each of these requests.
 The motivation for this type of flow is to support the case where the uploader
 is running in a different region than this service is.  If we required all
 uploads to gate through this service, we'd need to duplicate uploading effort
-and perform unneeded interregion transfers.  By transmitting a list of requests
+and perform unneeded inter-region transfers.  By transmitting a list of requests
 which allow the uploading to happen, we can instruct the uploader to upload
 directly to the existing S3 infrastructure, but perform all signing within this
 service.
@@ -113,7 +113,7 @@ A generalised request will look like:
   the request
 * Duplicated HTTP headers will be unsupported (i.e. key -> string not key ->
   list of strings)
-* All query string, path, fragements are contained in a fully formed `url`
+* All query string, path, fragments are contained in a fully formed `url`
   property
 
 ### Origins
@@ -128,7 +128,7 @@ will be used to map the token to find the backing storage provider.  If the
 origin is not an IP address and not a configured identifier, an error will be
 sent back to the client.
 
-The mapping of origins to storage providers should be staticly configured.
+The mapping of origins to storage providers should be statically configured.
 
 ### Creation
 
@@ -230,75 +230,6 @@ objsvc <-- s3 200 ETag {etag: 123456}
 uploader <-- objsvc 200
 ```
 
-### Part Size
-```
-GET /upload-info
-GET /upload-info/:origin
-```
-
-Multipart uploads in various backing services have differing requirements related
-to the size of each individual part.  This endpoint will return information about
-part sizes for a given origin.  In the case that the origin is not specified, the
-origin of the requester will be used.
-
-The response of this method for an S3 origin will be:
-
-```
-[
-  {
-    type: 'single-part',
-    max_size: 5 * 1024 * 1024,
-    min_size: 0,
-    max_part_count: 1,
-    min_part_count: 1,
-    min_part_size: 5 * 1024 * 1024,
-    max_part_size: 5 * 1024 * 1024,
-    part_size_multiple: 1,
-  },
-  {
-    type: 'multipart',
-    max_size: 5 * 1024 * 1024 * 1024,
-    min_size: 0,
-    max_part_count: 10000,
-    min_part_count: 1,
-    min_part_size: 5 * 1024 * 1024,
-    max_part_size: 5 * 1024 * 1024,
-    part_size_multiple: 1,
-  },
-]
-```
-
-All services will use a shape like this, changing their values to reflect their
-reality.  This format will give the uploader the ability to choose from the
-supported types of uploads.  Only those upload types which work with this
-upload flow will be supported, regardless of whether more options are available
-in the underlying API.
-
-The keys for this response will have the following meaning:
-
-* `type`: an identifier for the style of upload, unique to each underlying
-  service
-* `min`/`max_size`: The size range for the overall object in bytes
-* `min`/`max_part_count`: The range of number of parts allowed
-* `min`/`max_part_size`: The size range for each part in bytes
-* `part_size_multiple`: If a service requires parts be a multiple of a number,
-  this is the value.
-
-The ranges must all work together such that the most strict condition is not
-exceeded.  For example if the maximum number of parts is 10,000 and you want to
-use 5MB parts, you are limited to 5MB * 10,000, not 5TB.
-
-Of note is that the minimum part size is interpreted slightly differently.  In
-order to support last part part sizes which are not the minimum part size, the
-last part may be smaller than the minimum value specified here.
-
-This endpoint provides advisory information and does not obviate the service from
-checking these values to be valid when the object is created.  The object creation
-endpoint must always validate its provided values.
-
-The value of this URL is cachable for at least 30 minutes, which implies that
-origin to backend mapping must be stable for 30 minutes at a time.
-
 ### Deletion
 
 ```
@@ -336,7 +267,7 @@ closest to the request's IP address.  If needed, this will initiate a copy from
 the original backing store into a different storage location.  It will wait up
 to a configurable amount of time before redirecting to a non-optimal copy.
 
-In order to support running in environments where requests are limted in time,
+In order to support running in environments where requests are limited in time,
 the `max_time` query string option will specify roughly how many seconds the
 client is willing to wait for an object.  The default value should be based on
 the size of the object.  For example, it will wait 2s for each 100MB of object
@@ -348,7 +279,7 @@ as a request to override the automatic IP resolution, the optional
 `origin=<origin>` query parameter can be used.
 
 An object must not be viewable until any post-upload steps which are required
-have occured.  This is to ensure that objects which have not been fully
+have occurred.  This is to ensure that objects which have not been fully
 completed or had their validation completed are used
 
 Example inside heroku:
