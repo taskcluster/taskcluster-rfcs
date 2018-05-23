@@ -29,7 +29,8 @@ out where the best location to store an object is, provides an uploader with
 the signed HTTP requests needed to upload that object and provides downloaders
 the correct URL for downloading, possibly caching the object if needed.
 
-This RFC describes the interface of the Object Service; implementations may vary.
+This RFC describes the interface of the Object Service; implementations may
+vary.
 
 ## Motivation
 
@@ -92,10 +93,10 @@ requests with payload bodies and run each of these requests.
 The motivation for this type of flow is to support the case where the uploader
 is running in a different region than this service is.  If we required all
 uploads to gate through this service, we'd need to duplicate uploading effort
-and perform unneeded inter-region transfers.  By transmitting a list of requests
-which allow the uploading to happen, we can instruct the uploader to upload
-directly to the existing S3 infrastructure, but perform all signing within this
-service.
+and perform unneeded inter-region transfers.  By transmitting a list of
+requests which allow the uploading to happen, we can instruct the uploader to
+upload directly to the existing S3 infrastructure, but perform all signing
+within this service.
 
 A generalised request will look like:
 
@@ -117,7 +118,6 @@ A generalised request will look like:
   property
 
 ### Origins
-
 Where present, the `origin` rest parameter in this service will be either an
 IPv4 address, IPv6 address, or an identifier.  This parameter will specify the
 source location of the ultimately originating request to upload.  If the origin
@@ -229,6 +229,23 @@ objsvc --> s3 POST /object-abcd123?uploadId=u-123 {etags: [123, 456]}
 objsvc <-- s3 200 ETag {etag: 123456}
 uploader <-- objsvc 200
 ```
+#### Part Size for Multipart Uploads
+Many object storage systems offer the option to perform multipart uploads.
+This is done to enable parallel uploads as well as enabling files which are
+larger than any single HTTP request ought to be.  For example, Amazon S3 limits
+object creation requests to be no greater than 5GB.  In order to upload 10GB,
+you must use a multipart upload.
+
+One source of complexity here is that the uploader needs to know what part size
+they should be using.  We will document that the suggested part size is 64MB.
+This will be a part size which we will do our best to support in all cases.  If
+a backing storage does not support 64MB, we will investigate 
+
+In the case that a backing service does not support using 64MB parts, or the
+user provides a custom part size which is not supported by the backing service,
+we will respond to the `PUT` request with a 400-series error along with a JSON
+error message that provides information on part sizes which will work.  The
+uploader should store a copy of this information to inform future uploads.
 
 ### Deletion
 
@@ -292,6 +309,25 @@ Example inside heroku:
 10:00:55 --> 302 http://us-west-2.s3.amazonaws/objects/my_file
 ```
 
+# Security
+This service will use [JWT](https://tools.ietf.org/html/rfc7519) (Json Web
+Tokens) for authentication and authorization.  Each request to this service
+will include a token which includes information about which resource is being
+checked and which action it is allowed for.  These tokens will be for specific
+resources and operations.  The resources will be addressed using the terms of
+this API, rather than signing a URL.  The authentication scheme will use
+HMAC-SHA256 with a shared secret initially, but we will consider supporting
+stronger algorithms.
+
+We will support the token being provided either as a `token` query string
+parameter or as the value of the `Authentication` header.  Having both header
+and query string parameter specified is an error if they are not exactly equal
+bytes.  We will check for equality and not equivalence.
+
+The exact structure of the tokens is not formalized in this document, beyond
+that they will be per-resource, will have specific permissions, and will work
+in terms of this API and not as signed urls.
+
 # Open Questions
 
 * Will we move old artifacts over? **No**
@@ -300,10 +336,12 @@ Example inside heroku:
   * We will support pull-through caches the same way we support CDNs by redirecting
     urls.  These might be signed urls, as required by each underlying storage system
   * We will look into Ceph or similar systems
-* What auth scheme will we use between Queue and objects? **Maybe JWT**
-* Will we use Content Addressable storage?
-  * We like this idea, but we're going to do thinking about it later on since it's not
-    required that we tackle this upfront
+* What auth scheme will we use between Queue and objects? **JWT with HS256**
+* Will we use Content Addressable storage? **No**
+  * ~~We like this idea, but we're going to do thinking about it later on since
+    it's not required that we tackle this upfront~~
+  * We think this is neat, but the potential benefit is perceived to be too
+    small for the possible security risks
 
 # Implementation
 
