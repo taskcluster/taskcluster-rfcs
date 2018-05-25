@@ -335,6 +335,21 @@ In order to purge all caches, a special reserved cache id `all` would be used
 that purges all non-canonical copies of the object.  This also implies that the
 origin `all` is also reserved
 
+# Expiration
+The `expiration` parameter of an object is used to specify when an object
+should no longer be accessible for retrieval.  This parameter should also be
+used by the service to automatically purge canonical copies which have exceeded
+their expiration time.  The service should use backing service provided
+mechanisms for object expiration wherever possible.  Whatever system is used to
+delete expired artifacts must ensure that the object is removed no earlier than
+the expiration time.
+
+An object which is past its expiration should return a response equivalent to
+the error not being there at all.  In order to prevent name reuse, the object
+name will continue to exist as a delete marker to block a new object from
+reusing a name.  Deleting an object which has expired will clear this delete
+marker.
+
 # Security
 This service will use [JWT](https://tools.ietf.org/html/rfc7519) (Json Web
 Tokens) for authentication and authorization.  Each request to this service
