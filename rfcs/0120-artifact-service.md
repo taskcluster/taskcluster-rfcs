@@ -170,12 +170,11 @@ In this body, the content headers refer to the actual document
 
 This endpoint will return a list of HTTP requests which must all be run.
 
-The `POST` endpoint will be sent without a request body and will be used to
-perform any post-upload actions.  These include things like the commit step on
-an S3 multipart upload.  This endpoint would be run by the frontend service and
-not by the uploader, and the frontend service would also need a complimentary
-method for workers to call when they complete the upload.  This is what is
-currently done with the `blob` storage type in the queue.
+The `POST` endpoint will be sent with a zero-length request body and will be
+used to perform any post-upload actions.  These include things like the commit
+step on an S3 multipart upload.  This endpoint would be run by the frontend
+service and not by the uploader, and the frontend service would also need a
+complimentary method for workers to call when they complete the upload.
 
 The completion endpoint is used to perform any post-upload validation required.
 This might include the "Complete Multipart Upload" for S3 based objects, or
