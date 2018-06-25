@@ -150,23 +150,23 @@ about the object in the shape:
 {
   origin: '10.10.10.10' || 's3_us-west-2',
   contentType: 'application/json',
-  contentLength: 1234,
+  contentLength: 2048,
   contentSha256: 'abcdef1234',
-  transferLength: 1234,
+  transferLength: 2048,
   transferSha256: 'abcdef1234',
-  contentEncdoing: 
+  contentEncoding: 'identity',
   expiration: new Date(),
   parts: [{
-    sha256: 'abcd1234',
+    sha256: 'efdcb111',
     size: 1024,
   }, {
-    sha256: 'abcd1234',
+    sha256: 'fbcade321',
     size: 1024,
   }],
 }
 ```
 
-In this body, the content* headers refer to the actual document
+In this body, the content headers refer to the actual document
 
 This endpoint will return a list of HTTP requests which must all be run.
 
@@ -196,42 +196,45 @@ with the object service.  In reality this interaction would have something like
 the Queue as an intermediary between the uploader and the object service.
 
 ```
-uploader --> objsvc PUT /objects/abcd123  {
+uploader --> objsvc PUT /objects/myobject  {
                                             origin: '10.10.10.10',
                                             contentType: 'application/json',
-                                            contentLength: 1234,
+                                            contentLength: 2048,
                                             contentSha256: 'abcdef1234',
-                                            transferLength: 1234,
+                                            transferLength: 2048,
                                             transferSha256: 'abcdef1234',
-                                            contentEncdoing: 
+                                            contentEncoding: 'identity'
                                             expiration: new Date(),
                                             parts: [
-                                              sha256: 'abcd1234',
+                                              sha256: 'efdcb111',
                                               size: 1024,
                                             }, {
-                                              sha256: 'abcd1234',
+                                              sha256: 'fbcade321',
                                               size: 1024,
                                             }],
                                           }
-objsvc --> s3 POST /object-abcd123?uploads
-objsvc <-- s3 200 UploadId=u-123
+objsvc --> s3 POST /object-myobject?uploads
+objsvc <-- s3 200 UploadId=upload1
 uploader <-- objsvc 200 {requests: [{
-                          url: 'http://s3.com/object-abcd123?partNumber=1&uploadId=u-123',
+                          url: 'http://s3.com/object-myobject?partNumber=1&uploadId=upload1',
                           headers: {authorization: 'signature-request-1'},
                           method: 'PUT'
                         }, {
-                          url: 'http://s3.com/object-abcd123?partNumber=2&uploadId=u-123',
+                          url: 'http://s3.com/object-myobject?partNumber=2&uploadId=upload1',
                           headers: {authorization: 'signature-request-1'},
                           method: 'PUT'
                         }
                        ]}
-uploader --> s3 PUT /object-abcd123?partNumber=1&uploadId=u-123'
-uploader <-- s3 200 ETag {etag: 123}
-uploader --> s3 PUT /object-abcd123?partNumber=2&uploadId=u-123'
-uploader <-- s3 200 ETag {etag: 456}
-uploader --> objsvc POST /objects/abcd123 {etags: [123, 456]}
-objsvc --> s3 POST /object-abcd123?uploadId=u-123 {etags: [123, 456]}
-objsvc <-- s3 200 ETag {etag: 123456}
+uploader --> s3 PUT /object-myobject?partNumber=1&uploadId=upload1'
+uploader <-- s3 200 ETag {etag: 'Opaque-Etag-From-S3-1'}
+uploader --> s3 PUT /object-myobject?partNumber=2&uploadId=upload1'
+uploader <-- s3 200 ETag {etag: 'Opaque-Etag-From-S3-2'}
+uploader --> objsvc POST /objects/myobject {etags: ['Opaque-Etag-From-S3-1',
+                                                    'Opaque-Etag-From-S3-2']}
+objsvc --> s3 POST /object-myobject?uploadId=upload1 {etags: [
+                                                    'Opaque-Etag-From-S3-1',
+                                                    'Opaque-Etag-From-S3-2']}
+objsvc <-- s3 200 ETag {etag: 'Opaque-Etag-For-Completed-Object'}
 uploader <-- objsvc 200
 ```
 
@@ -247,8 +250,7 @@ you must use a multipart upload.
 
 One source of complexity here is that the uploader needs to know what part size
 they should be using.  We will document that the suggested part size is 64MB.
-This will be a part size which we will do our best to support in all cases.  If
-a backing storage does not support 64MB, we will investigate 
+This will be a part size which we will do our best to support in all cases.
 
 In the case that a backing service does not support using 64MB parts, or the
 user provides a custom part size which is not supported by the backing service,
