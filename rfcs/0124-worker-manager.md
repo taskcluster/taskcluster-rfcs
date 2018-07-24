@@ -176,12 +176,16 @@ defines nothing more than the images to be used, the AMI build process knows
 which rule needs to be edited for the new image.
 
 ### Conditions
-Each rule's conditions can be `null`, a string or a list of strings.  The
-`null` value signifies that there are no conditions for the rule, and thus
-universally applicable.  A string value will be used as input to a glob-pattern
-matching system to check if it is a match for the presented option.  The
-specifics of how the pattern matching works will be determined by the pattern
-matching system selected during implementation.
+Each rule's conditions can be `null` or a mapping of condition names to a
+string or a list of strings.  The `null` value signifies that there are no
+conditions for the rule, and thus universally applicable.
+
+For condition objects, each property name will be the condition name to match
+against and each value will be a string or a list of strings.  A string value
+will be used as input to a glob-pattern matching system to check if it is a
+match for the presented option.  The specifics of how the pattern matching
+works will be determined by the pattern matching system selected during
+implementation.
 
 In the list of strings case, each string will follow the interpretation rules
 as specified for a single string.  If any string pattern in the list of strings
@@ -356,8 +360,8 @@ standard response entries as well as an opaque data field which the provider
 will use the complete the bid if it is selected.  The standard response entries
 will be things like the amount of capacity for that bid, a price per capacity
 unit in the bid and a rating of how reliable the provider thinks the bid will
-be.  The bidding strategy will pass the selected bid to the provider for
-allocation.  The default bidding strategy will match the current
+be at being fulfilled.  The bidding strategy will pass the selected bid to the
+provider for allocation.  The default bidding strategy will match the current
 aws-provisioner algorithm.
 
 In order to support development of experimental bidding strategies, a bidding
