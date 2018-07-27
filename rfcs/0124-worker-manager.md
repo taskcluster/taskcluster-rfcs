@@ -411,26 +411,5 @@ the host name of the machine.  The server will then request credentials from the
 main worker manager through a Taskcluster-scope protected API and forward them
 onto the worker.
 
-# Open Questions
-- <strike>Will we deprecate provisionerId? -- separate RFC?</strike> not for now
-- <strike>Email Provisioning strategy -- Email a mailing list when a worker type needs</strike> feels more like implementation detail or future rfc
-  more capacity?  Maybe use taskcluster-notify instead.
-- Keep multiple worker types for one worker config? ''yes''
-- Will we use RabbitMQ messages for worker status and outcomes or will we have
-  the Queue call into the worker manager to update worker information?
-- Will providers use identifiers that embed the cloud (e.g. ec2_us-west-1) or
-  will we create a cloud level identifier in configuration?
-- Will we keep ability to delete properties in rulesets? easy to implement
-  but blocks use of the `null` value from being used as an actual value
-  of configuration.
-
-<what isn't decided yet? remove this section when it is empty, and then go to
-the final comment phase>
-
 # Implementation
-
-<once the RFC is decided, these links will provide readers a way to track the
-implementation through to completion>
-
-* <link to tracker bug, issue, etc.>
-* <...>
+[bug 1478941](https://bugzilla.mozilla.org/show_bug.cgi?id=1478941)
