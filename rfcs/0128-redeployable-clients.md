@@ -253,13 +253,21 @@ eventually served.
 
 ## Changes to taskcluster client building procedure
 
-### Language clients with type code generation (go, java)
+### All language clients (go, java, node.js, python)
 
 The build process for these clients should be moved into a standalone tool that
 requires a `TASKCLUSTER_ROOT_URL` to be specified to build the client for. It
 will then query the API References manifest in order to determine all the APIs
 it needs to build, and from there build packages for each API reference it
 finds.
+
+Please note, the built client will retain NO REFERENCES to the client it was
+built from, other than as comments as a reference. The value of the
+`TASKCLUSTER_ROOT_URL` at build time is simply to freeze the API references and
+schemas to a given set. A client can be built against one taskcluster
+deployment, but calling code may choose to use that client to talk to a
+different cluster. It is the responsibility of the caller to ensure that the
+methods he/she calls are compatible with the deployment he/she connects to.
 
 The API reference for a service must declare the `$schema` json schema property
 to say which API reference it implements. If this matches an API reference that
@@ -272,6 +280,12 @@ needs to be updated when the code generation process changes, not when service
 API definitions change.
 
 ### Language clients wihtout type code generation (node.js, python)
+
+The clients that do not dynamically generate code still need to retain
+information from the API references and schemas. Those clients should be
+shipped together with a set of references and schemas, but provide the facility
+for these references and schemas to be refetched from a taskcluster deployment
+(specified by a taskcluster root URL).
 
 ## Changes to taskcluster client features and configuration
 
@@ -293,6 +307,13 @@ configuration files.
 
 ## Changes to adding taskcluster client as a service dependency
 
+When upgrading to the new client, care will need to be taken to ensure that
+taskcluster root URL is passed into the client. In addition, the
+references/schemas that the client reads dynamically should also be a
+dependency of the project, which may be either frozen references/schemas,
+fetched from a language package, or fetched dynamically during build/CI from a
+taskcluster deployment.
+
 ## Changes to projects that depend on a taskcluster client
 
 Those that depend on a client with generated code based on the content of the
@@ -306,13 +327,30 @@ root URL in a constructor, or explicitly call a method to fetch
 
 ## Changes to `taskcluster-proxy` and its configuration
 
-## Changes to workers that use clients
+## Changes to workers
 
-## Changes to task process environment variables in workers
+* Workers that are started by a provisioner should fetch `TASKCLUSTER_ROOT_URL`
+  from provisioner on start up
+* Workers should require a new config property for taskcluster root URL in
+  their config, and refuse to run if they do not have it and can't fetch it
+  from provisioner configuration (no default allowed)
+* Workers should pass `TASKCLUSTER_ROOT_URL` environment variable to all task
+  processes they create.
+* Workers should pass `TASKCLUSTER_ROOT_URL` to `taskcluster-proxy` when
+  starting it up
 
 ## Changes to tasks that use `taskcluster-proxy`
 
+* Tasks that made API calls directly to taskcluster-proxy, and not via a
+  taskcluster client (e.g. using curl directly) should still work, since the
+  proxy knows which taskcluster root url to use from how it was invoked by the
+  worker. 
+
 ## Changes to tasks that use a taskcluster-client
+
+If these tasks use an old taskcluster-client, no changes required. Tasks using
+a new taskcluster client should make sure to set the TASKCLSUTER_ROOT_URL based
+on the env var given to them from the worker.
 
 ## Changes to `taskcluster-lib-urls`
 
@@ -328,7 +366,13 @@ These will return absolute urls to the `*-reference.json` documents.
 
 ## Changes to building docs site
 
+The author has no knowledge of this process, and leaves it up to the
+implementor to decide.
+
 ## Changes to taskcluster platform development lifecycle
+
+The author has no knowledge of this process, and leaves it up to the
+implementor to decide.
 
 # Open Questions
 
