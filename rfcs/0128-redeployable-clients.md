@@ -360,7 +360,7 @@ on the env var given to them from the worker.
 ## Changes to `taskcluster-lib-urls`
 
 * Method `ServicesManifest` should be renamed to `APIReferencesManifest`.
-* A new method APIReferenceReference should be added, e.g. for go client:
+* The following new methods should be added, e.g. for go client:
 
 ```go
 func HTTPReference(rootURL string, version string) string
