@@ -224,6 +224,33 @@ from `<TASKCLUSTER_ROOT_URL>/schemas/base/v1/amqp-reference.json`.
 
 ## Changes to publication of API references and schemas
 
+The implementation must serve the described resources under the given URLs set
+out in this document. The author is not concerned with how a service declares
+its API references to the platform during build/deploy stages in order that the
+references are included in the API references manifest, that is a matter for
+the implementor.
+
+The author considers it reasonable though, that there could be an API endpoint
+that enables services to register their API references with the taskcluster
+platform when they start up. An advantage of this approach (rather than burning
+this information into the build/deploy steps) is that a taskcluster platform
+can evolve, with parties able to declare new services at runtime, that aren't
+necessarily able to affect the taskcluster build/deploy steps.
+
+For example, in an organisation where there is a taskcluster deployment team
+looking after a deployment, they may wish to grant scopes to another team who
+are developing additional services which plug into the core taskcluster
+deployment. By granting this other team the scopes to declare API references,
+the team can work autonomously in developing new services, without the
+taskcluster deployment team needing to restart or rebuild their taskcluster
+deployment. The second team can make their API references available and modify
+them as they see fit while the taskcluster core platform is running without any
+maintenance overhead.
+
+But we may wish to implement such a thing in a future PR - for the time being,
+the author does not care about the publish mechanism, only that the content is
+eventually served.
+
 ## Changes to taskcluster client building procedure
 
 ### Language clients with type code generation (go, java)
