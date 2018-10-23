@@ -20,8 +20,8 @@ This RFC defines:
 
 This entails changes to the way workers will share deployment / authentication
 proxy configuration information with tasks, versioning of the API / Event
-reference schemas, versioning of the services definitions based on those API
-and Event reference schemas, and the possibility for clients to connect to
+reference schemas, versioning of the API references manifest based on those
+HTTP and AMQP reference schemas, and the possibility for clients to connect to
 different taskcluster deployments.
 
 ## 2. Motivation
@@ -32,28 +32,24 @@ taskcluster.net domain).
 
 # 3. Details
 
-## 3.1. Publishing API schemas ("references")
+## 3.1 The development lifecycle of APIs
 
-### 3.1.1 Current situation
+Taskcluster services may publish reference schemas for each API they offer
+(referred to as an "API reference"). The API reference describes a given API
+interface to the service in a structured form.
 
-Taskcluster services currently provide either one or two of the following types
-of interface (API):
+There is a single API manifest which lists all API references, hosted at
+[https://references.taskcluster.net/manifest.json].
 
-* HTTP (mostly RESTful)
-* AMQP 0.9.1 (provided via mozilla pulse, a customised RabbitMQ deployment)
-
-Each service publishes a reference schema for each API it offers (referred to
-as an "API reference"), which describes the API interface to the service in a
-structured form.
-
-There is a single static global manifest of all API references, hosted
-[here](https://references.taskcluster.net/manifest.json).
-
-API references are json documents which conform to one of the following json
-schemas:
+API references are json documents which conform to a reference schemas. The
+currently existing reference schemas are these:
 
 * [HTTP reference schema](https://schemas.taskcluster.net/base/v1/api-reference.json)
 * [AMQP 0.9.1 reference schema](https://schemas.taskcluster.net/base/v1/exchanges-reference.json)
+
+This list may be augmented in future, or indeed custom taskcluster deployments
+may wish to provide their own reference schemas which are not understood or
+used by the core taskcluster platform.
 
 The published API references are consumed during the following activities:
 
@@ -85,17 +81,16 @@ The development workflow typically looks like this:
    versions, and released
 6. Released software is tested and deployed
 
-### 3.1.2 Changes required
+## 3.2 Changes to publishing API manifest
 
 1. If a service of a taskcluster deployment provides a HTTP interface, the
    cluster may host the HTTP API reference document under
-   `<TASKCLUSTER_ROOT_URL>/references/<serviceName>/<version>/api.json`
+   `<TASKCLUSTER_ROOT_URL>/references/<serviceName>/<version>/http.json`
 2. If a service of a taskcluster deployment provides an AMQP 0.9.1 interface,
    the cluster may host the AMQP 0.9.1 API reference document under
-   `<TASKCLUSTER_ROOT_URL>/references/<serviceName>/<version>/exchanges.json`
-3. A taskcluster deployment should serve a service manifest
-   under `<TASKCLUSTER_ROOT_URL>/references/manifest.json` with the following
-   format:
+   `<TASKCLUSTER_ROOT_URL>/references/<serviceName>/<version>/amqp.json`
+3. A taskcluster deployment must serve the API references manifest under
+   `<TASKCLUSTER_ROOT_URL>/references/manifest.json` with the following format:
 
 ```
 {
@@ -117,24 +112,24 @@ For example, the current production taskcluster.net manifest would look like thi
 {
   "version" : 1,
   "references": [
-    "https://references.taskcluster.net/auth/v1/api.json",
-    "https://references.taskcluster.net/auth/v1/exchanges.json",
-    "https://references.taskcluster.net/aws-provisioner/v1/api.json",
-    "https://references.taskcluster.net/aws-provisioner/v1/exchanges.json",
-    "https://references.taskcluster.net/ec2-manager/v1/api.json",
-    "https://references.taskcluster.net/github/v1/api.json",
-    "https://references.taskcluster.net/github/v1/exchanges.json",
-    "https://references.taskcluster.net/hooks/v1/api.json",
-    "https://references.taskcluster.net/index/v1/api.json",
-    "https://references.taskcluster.net/login/v1/api.json",
-    "https://references.taskcluster.net/notify/v1/api.json",
-    "https://references.taskcluster.net/pulse/v1/api.json",
-    "https://references.taskcluster.net/purge-cache/v1/api.json",
-    "https://references.taskcluster.net/purge-cache/v1/exchanges.json",
-    "https://references.taskcluster.net/queue/v1/api.json",
-    "https://references.taskcluster.net/queue/v1/exchanges.json",
-    "https://references.taskcluster.net/secrets/v1/api.json",
-    "https://references.taskcluster.net/treeherder/v1/exchanges.json"
+    "https://references.taskcluster.net/auth/v1/http.json",
+    "https://references.taskcluster.net/auth/v1/amqp.json",
+    "https://references.taskcluster.net/aws-provisioner/v1/http.json",
+    "https://references.taskcluster.net/aws-provisioner/v1/amqp.json",
+    "https://references.taskcluster.net/ec2-manager/v1/http.json",
+    "https://references.taskcluster.net/github/v1/http.json",
+    "https://references.taskcluster.net/github/v1/amqp.json",
+    "https://references.taskcluster.net/hooks/v1/http.json",
+    "https://references.taskcluster.net/index/v1/http.json",
+    "https://references.taskcluster.net/login/v1/http.json",
+    "https://references.taskcluster.net/notify/v1/http.json",
+    "https://references.taskcluster.net/pulse/v1/http.json",
+    "https://references.taskcluster.net/purge-cache/v1/http.json",
+    "https://references.taskcluster.net/purge-cache/v1/amqp.json",
+    "https://references.taskcluster.net/queue/v1/http.json",
+    "https://references.taskcluster.net/queue/v1/amqp.json",
+    "https://references.taskcluster.net/secrets/v1/http.json",
+    "https://references.taskcluster.net/treeherder/v1/amqp.json"
   ]
 }
 ```
@@ -146,24 +141,24 @@ However, for a taskcluster deployment with
 {
   "version" : 1,
   "references": [
-    "https://tc.foo/references/auth/v1/api.json",
-    "https://tc.foo/references/auth/v1/exchanges.json",
-    "https://tc.foo/references/aws-provisioner/v1/api.json",
-    "https://tc.foo/references/aws-provisioner/v1/exchanges.json",
-    "https://tc.foo/references/ec2-manager/v1/api.json",
-    "https://tc.foo/references/github/v1/api.json",
-    "https://tc.foo/references/github/v1/exchanges.json",
-    "https://tc.foo/references/hooks/v1/api.json",
-    "https://tc.foo/references/index/v1/api.json",
-    "https://tc.foo/references/login/v1/api.json",
-    "https://tc.foo/references/notify/v1/api.json",
-    "https://tc.foo/references/pulse/v1/api.json",
-    "https://tc.foo/references/purge-cache/v1/api.json",
-    "https://tc.foo/references/purge-cache/v1/exchanges.json",
-    "https://tc.foo/references/queue/v1/api.json",
-    "https://tc.foo/references/queue/v1/exchanges.json",
-    "https://tc.foo/references/secrets/v1/api.json",
-    "https://tc.foo/references/treeherder/v1/exchanges.json"
+    "https://tc.foo/references/auth/v1/http.json",
+    "https://tc.foo/references/auth/v1/amqp.json",
+    "https://tc.foo/references/aws-provisioner/v1/http.json",
+    "https://tc.foo/references/aws-provisioner/v1/amqp.json",
+    "https://tc.foo/references/ec2-manager/v1/http.json",
+    "https://tc.foo/references/github/v1/http.json",
+    "https://tc.foo/references/github/v1/amqp.json",
+    "https://tc.foo/references/hooks/v1/http.json",
+    "https://tc.foo/references/index/v1/http.json",
+    "https://tc.foo/references/login/v1/http.json",
+    "https://tc.foo/references/notify/v1/http.json",
+    "https://tc.foo/references/pulse/v1/http.json",
+    "https://tc.foo/references/purge-cache/v1/http.json",
+    "https://tc.foo/references/purge-cache/v1/amqp.json",
+    "https://tc.foo/references/queue/v1/http.json",
+    "https://tc.foo/references/queue/v1/amqp.json",
+    "https://tc.foo/references/secrets/v1/http.json",
+    "https://tc.foo/references/treeherder/v1/amqp.json"
   ]
 }
 ```
@@ -203,6 +198,36 @@ manifest simply says "these are the APIs I declare, here is where you can fetch
 their references, and they are self-describing, so go ask them". It doesn't
 burn in any concerns about URL path building, or the types of reference we
 support.
+
+## Changes to HTTP references format
+
+## Changes to AMQP references format
+
+## Changes to publication of API references and schemas
+
+## Changes to taskcluster client building procedure
+
+## Changes to taskcluster client features and configuration
+
+## Changes to adding taskcluster client as a service dependency
+
+## Changes to projects that depend on a taskcluster client
+
+## Changes to `taskcluster-proxy` and its configuration
+
+## Changes to workers that use clients
+
+## Changes to task process environment variables in workers
+
+## Changes to tasks that use `taskcluster-proxy`
+
+## Changes to tasks that use a taskcluster-client
+
+## Changes to `taskcluster-lib-urls`
+
+## Changes to building docs site
+
+## Changes to taskcluster platform development lifecycle
 
 # Open Questions
 
