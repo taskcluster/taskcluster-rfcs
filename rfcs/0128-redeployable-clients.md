@@ -9,7 +9,7 @@ becomes redeployable.
 
 This RFC defines:
 
-* how taskcluster deployments will publish a manifest of their services
+* how taskcluster deployments will publish a manifest of their API references
 * how client generators will query and interpret service manifests and associated
   reference and schema documents in order to generate clients
 * how the architecture of the generated clients will change
@@ -74,8 +74,9 @@ The development workflow typically looks like this:
 2. When the new service is deployed, its API references are automatically
    published somewhere under https://references.taskcluster.net/ as part of the
    deployment process
-3. The [services manifest](https://references.taskcluster.net/manifest.json) is
-   manually updated to include the API references
+3. The [API references
+   manifest](https://references.taskcluster.net/manifest.json) is manually
+   updated to include the API references
 4. Taskcluster clients are built and released
 5. Software that interfaces with the new APIs is updated to pull in new client
    versions, and released
