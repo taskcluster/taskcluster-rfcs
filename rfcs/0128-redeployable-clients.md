@@ -327,6 +327,11 @@ root URL in a constructor, or explicitly call a method to fetch
 
 ## Changes to `taskcluster-proxy` and its configuration
 
+The taskcluster proxy should require an additional property to start up, which
+is the root url of the deployment it should talk to. This should be a mandatory
+property, and no default should be supplied, so the user is forced to make an
+active choice about which environment they wish the proxy to connect to.
+
 ## Changes to workers
 
 * Workers that are started by a provisioner should fetch `TASKCLUSTER_ROOT_URL`
