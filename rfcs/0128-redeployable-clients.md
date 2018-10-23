@@ -202,17 +202,80 @@ support.
 
 ## Changes to HTTP references format
 
+The `api-reference.json` document currently served
+http://schemas.taskcluster.net/base/v1/api-reference.json from should be served
+from `<TASKCLUSTER_ROOT_URL>/schemas/base/v1/http-reference.json`.
+
+* All `entries[*].input` and `entries[*].output` properties should be URLs
+  relative to `<taskclusterRootURL>/schemas/<serviceName>`
+
+(This has already been implemented across most services)
+
 ## Changes to AMQP references format
+
+The `api-reference.json` document currently served
+http://schemas.taskcluster.net/base/v1/api-reference.json from should be served
+from `<TASKCLUSTER_ROOT_URL>/schemas/base/v1/amqp-reference.json`.
+
+* All `entries[*].schema` properties should be URLs relative to
+  `<taskclusterRootURL>/schemas/<serviceName>`
+
+(This has already been implemented across most services)
 
 ## Changes to publication of API references and schemas
 
 ## Changes to taskcluster client building procedure
 
+### Language clients with type code generation (go, java)
+
+The build process for these clients should be moved into a standalone tool that
+requires a `TASKCLUSTER_ROOT_URL` to be specified to build the client for. It
+will then query the API References manifest in order to determine all the APIs
+it needs to build, and from there build packages for each API reference it
+finds.
+
+The API reference for a service must declare the `$schema` json schema property
+to say which API reference it implements. If this matches an API reference that
+the client builder knows how to build, it will build a source code package for
+it in a local directory. If not, it may either skip it with a warning message,
+or throw an error.
+
+This code for the code generator will live in a taskcluster repo, and only
+needs to be updated when the code generation process changes, not when service
+API definitions change.
+
+### Language clients wihtout type code generation (node.js, python)
+
 ## Changes to taskcluster client features and configuration
+
+Constructors for clients should require the rootURL to be explicitly provided,
+i.e. no default. This is in order to ensure that the choice of deployed cluster
+to connect to is an active one. The client may provide a utility methods to fetch
+TASKCLUSTER_ROOT_URL from the environment, but it should not be assumed that if
+this environment variable exists, that it should be used. Rather, code that calls
+the taskcluster client should have to explicitly declare they wish to do so, for
+example:
+
+```
+queue := queue.NewFromEnvVars()
+```
+
+This is important because not all code will want to configure settings based on
+environment variables, for example workers that take their configuration from
+configuration files.
 
 ## Changes to adding taskcluster client as a service dependency
 
 ## Changes to projects that depend on a taskcluster client
+
+Those that depend on a client with generated code based on the content of the
+API references and schemas, should either run the code generation tool inside
+their project on an ad hoc basis, and check in the generated code, or should
+run it as part of their build/ci procedure.
+
+All code that uses any of the new clients will need to explicitly pass in a
+root URL in a constructor, or explicitly call a method to fetch
+`TASKCLUSTER_ROOT_URL` from the environment.
 
 ## Changes to `taskcluster-proxy` and its configuration
 
@@ -225,6 +288,16 @@ support.
 ## Changes to tasks that use a taskcluster-client
 
 ## Changes to `taskcluster-lib-urls`
+
+* Method `ServicesManifest` should be renamed to `APIReferencesManifest`.
+* A new method APIReferenceReference should be added, e.g. for go client:
+
+```go
+func HTTPReference(rootURL string, version string) string
+func AMQPReference(rootURL string, version string) string
+```
+
+These will return absolute urls to the `*-reference.json` documents.
 
 ## Changes to building docs site
 
