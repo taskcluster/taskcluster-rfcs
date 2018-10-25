@@ -1,6 +1,9 @@
-# RFC 0128 - Provide docs/standards about client/worker/proxy interactions in redeployable taskcluster
+# RFC 0128 - Client/worker/proxy interactions in redeployable taskcluster
+
 * Comments: [#128](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/128)
 * Proposed by: @petemoore
+
+# Table of contents
 
    * [RFC 0128 - Provide docs/standards about client/worker/proxy interactions in redeployable taskcluster](#rfc-0128---provide-docsstandards-about-clientworkerproxy-interactions-in-redeployable-taskcluster)
    * [1. Summary](#1-summary)
