@@ -2,6 +2,31 @@
 * Comments: [#128](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/128)
 * Proposed by: @petemoore
 
+   * [RFC 0128 - Provide docs/standards about client/worker/proxy interactions in redeployable taskcluster](#rfc-0128---provide-docsstandards-about-clientworkerproxy-interactions-in-redeployable-taskcluster)
+   * [1. Summary](#1-summary)
+      * [2. Motivation](#2-motivation)
+      * [3 How API definitions are managed today (pre-redeployability)](#3-how-api-definitions-are-managed-today-pre-redeployability)
+      * [4. Proposed changes](#4-proposed-changes)
+      * [4.1 Changes to publishing API manifest](#41-changes-to-publishing-api-manifest)
+      * [4.2 Changes to HTTP references format](#42-changes-to-http-references-format)
+      * [4.3 Changes to AMQP references format](#43-changes-to-amqp-references-format)
+      * [4.4 Changes to publication of API references and schemas](#44-changes-to-publication-of-api-references-and-schemas)
+      * [4.5 Changes to taskcluster client building procedure](#45-changes-to-taskcluster-client-building-procedure)
+         * [4.5.1 All language clients (go, java, node.js, python)](#451-all-language-clients-go-java-nodejs-python)
+         * [4.5.2 Language clients wihtout type code generation (node.js, python)](#452-language-clients-wihtout-type-code-generation-nodejs-python)
+      * [4.6 Changes to taskcluster client features and configuration](#46-changes-to-taskcluster-client-features-and-configuration)
+      * [4.7 Changes to adding taskcluster client as a service dependency](#47-changes-to-adding-taskcluster-client-as-a-service-dependency)
+      * [4.8 Changes to projects that depend on a taskcluster client](#48-changes-to-projects-that-depend-on-a-taskcluster-client)
+      * [4.9 Changes to taskcluster-proxy and its configuration](#49-changes-to-taskcluster-proxy-and-its-configuration)
+      * [4.10 Changes to workers](#410-changes-to-workers)
+      * [4.11 Changes to tasks that use taskcluster-proxy](#411-changes-to-tasks-that-use-taskcluster-proxy)
+      * [4.12 Changes to tasks that use a taskcluster-client](#412-changes-to-tasks-that-use-a-taskcluster-client)
+      * [4.13 Changes to taskcluster-lib-urls](#413-changes-to-taskcluster-lib-urls)
+      * [4.14 Changes to building docs site](#414-changes-to-building-docs-site)
+      * [4.15 Changes to taskcluster platform development lifecycle](#415-changes-to-taskcluster-platform-development-lifecycle)
+   * [5. Open Questions](#5-open-questions)
+   * [6. Implementation](#6-implementation)
+
 # 1. Summary
 
 Changes are required for clients of taskcluster services when taskcluster
@@ -9,9 +34,10 @@ becomes redeployable.
 
 This RFC defines:
 
-* how taskcluster deployments will publish a manifest of their API references
-* how client generators will query and interpret service manifests and associated
-  reference and schema documents in order to generate clients
+* how taskcluster deployments will publish an API manifest describing its
+  programmable interfaces
+* how taskcluster client generators will fetch and interpret an API manifest in
+  order to discover references and schemas to build the clients against
 * how the architecture of the generated clients will change
 * how generated clients and client generators will be built, released and
   deployed
@@ -30,9 +56,7 @@ This RFC is needed in order to support the redeployability project (multiple
 deployments of taskcluster rather than just a single global deployment under
 taskcluster.net domain).
 
-# 3. Details
-
-## 3.1 The development lifecycle of APIs
+## 3 How API definitions are managed today (pre-redeployability)
 
 Taskcluster services may publish reference schemas for each API they offer
 (referred to as an "API reference"). The API reference describes a given API
@@ -41,8 +65,10 @@ interface to the service in a structured form.
 There is a single API manifest which lists all API references, hosted at
 [https://references.taskcluster.net/manifest.json].
 
-API references are json documents which conform to a reference schemas. The
-currently existing reference schemas are these:
+API references are structured json documents which describe an API that a
+service provides. These json documents declare a json schema document that they
+adhere to, called a reference schema. The currently referenced reference
+schemas in production today are:
 
 * [HTTP reference schema](https://schemas.taskcluster.net/base/v1/api-reference.json)
 * [AMQP 0.9.1 reference schema](https://schemas.taskcluster.net/base/v1/exchanges-reference.json)
@@ -55,8 +81,8 @@ The published API references are consumed during the following activities:
 
 * building taskcluster clients, that provide language-level programming
   interfaces to taskcluster APIs
-* refreshing taskcluster docs site, that displays information about taskcluster
-  APIs
+* refreshing `taskcluster-raw-docs` AWS S3 bucket, which is used by taskcluster
+  docs site, that displays information about taskcluster APIs
 * generating taskcluster command line tools, that provide command line
   interfaces to taskcluster APIs (such as `taskcluster-cli`)
 
@@ -82,7 +108,9 @@ The development workflow typically looks like this:
    versions, and released
 6. Released software is tested and deployed
 
-## 3.2 Changes to publishing API manifest
+## 4. Proposed changes
+
+## 4.1 Changes to publishing API manifest
 
 1. If a service of a taskcluster deployment provides a HTTP interface, the
    cluster may host the HTTP API reference document under
@@ -95,7 +123,7 @@ The development workflow typically looks like this:
 
 ```
 {
-  "version" : 1,
+  "$schema" : "<fully-qualified-url-to-api-manifest-schema>",
   "references": [
     "<fully-qualified-url-to-reference-doc>",
     "<fully-qualified-url-to-reference-doc>",
@@ -111,7 +139,7 @@ For example, the current production taskcluster.net manifest would look like thi
 
 ```
 {
-  "version" : 1,
+  "$schema" : "<fully-qualified-url-to-api-manifest-schema>",
   "references": [
     "https://references.taskcluster.net/auth/v1/http.json",
     "https://references.taskcluster.net/auth/v1/amqp.json",
@@ -140,7 +168,7 @@ However, for a taskcluster deployment with
 
 ```
 {
-  "version" : 1,
+  "$schema" : "<fully-qualified-url-to-api-manifest-schema>",
   "references": [
     "https://tc.foo/references/auth/v1/http.json",
     "https://tc.foo/references/auth/v1/amqp.json",
@@ -200,29 +228,29 @@ their references, and they are self-describing, so go ask them". It doesn't
 burn in any concerns about URL path building, or the types of reference we
 support.
 
-## Changes to HTTP references format
+## 4.2 Changes to HTTP references format
 
 The `api-reference.json` document currently served
 http://schemas.taskcluster.net/base/v1/api-reference.json from should be served
 from `<TASKCLUSTER_ROOT_URL>/schemas/base/v1/http-reference.json`.
 
 * All `entries[*].input` and `entries[*].output` properties should be URLs
-  relative to `<taskclusterRootURL>/schemas/<serviceName>`
+  relative to `<TASKCLUSTER_ROOT_URL>/schemas/<serviceName>`
 
 (This has already been implemented across most services)
 
-## Changes to AMQP references format
+## 4.3 Changes to AMQP references format
 
 The `api-reference.json` document currently served
 http://schemas.taskcluster.net/base/v1/api-reference.json from should be served
 from `<TASKCLUSTER_ROOT_URL>/schemas/base/v1/amqp-reference.json`.
 
 * All `entries[*].schema` properties should be URLs relative to
-  `<taskclusterRootURL>/schemas/<serviceName>`
+  `<TASKCLUSTER_ROOT_URL>/schemas/<serviceName>`
 
 (This has already been implemented across most services)
 
-## Changes to publication of API references and schemas
+## 4.4 Changes to publication of API references and schemas
 
 The implementation must serve the described resources under the given URLs set
 out in this document. The author is not concerned with how a service declares
@@ -251,9 +279,9 @@ But we may wish to implement such a thing in a future PR - for the time being,
 the author does not care about the publish mechanism, only that the content is
 eventually served.
 
-## Changes to taskcluster client building procedure
+## 4.5 Changes to taskcluster client building procedure
 
-### All language clients (go, java, node.js, python)
+### 4.5.1 All language clients (go, java, node.js, python)
 
 The build process for these clients should be moved into a standalone tool that
 requires a `TASKCLUSTER_ROOT_URL` to be specified to build the client for. It
@@ -279,7 +307,7 @@ This code for the code generator will live in a taskcluster repo, and only
 needs to be updated when the code generation process changes, not when service
 API definitions change.
 
-### Language clients wihtout type code generation (node.js, python)
+### 4.5.2 Language clients wihtout type code generation (node.js, python)
 
 The clients that do not dynamically generate code still need to retain
 information from the API references and schemas. Those clients should be
@@ -287,7 +315,7 @@ shipped together with a set of references and schemas, but provide the facility
 for these references and schemas to be refetched from a taskcluster deployment
 (specified by a taskcluster root URL).
 
-## Changes to taskcluster client features and configuration
+## 4.6 Changes to taskcluster client features and configuration
 
 Constructors for clients should require the rootURL to be explicitly provided,
 i.e. no default. This is in order to ensure that the choice of deployed cluster
@@ -305,7 +333,7 @@ This is important because not all code will want to configure settings based on
 environment variables, for example workers that take their configuration from
 configuration files.
 
-## Changes to adding taskcluster client as a service dependency
+## 4.7 Changes to adding taskcluster client as a service dependency
 
 When upgrading to the new client, care will need to be taken to ensure that
 taskcluster root URL is passed into the client. In addition, the
@@ -314,7 +342,7 @@ dependency of the project, which may be either frozen references/schemas,
 fetched from a language package, or fetched dynamically during build/CI from a
 taskcluster deployment.
 
-## Changes to projects that depend on a taskcluster client
+## 4.8 Changes to projects that depend on a taskcluster client
 
 Those that depend on a client with generated code based on the content of the
 API references and schemas, should either run the code generation tool inside
@@ -325,14 +353,14 @@ All code that uses any of the new clients will need to explicitly pass in a
 root URL in a constructor, or explicitly call a method to fetch
 `TASKCLUSTER_ROOT_URL` from the environment.
 
-## Changes to `taskcluster-proxy` and its configuration
+## 4.9 Changes to `taskcluster-proxy` and its configuration
 
 The taskcluster proxy should require an additional property to start up, which
 is the root url of the deployment it should talk to. This should be a mandatory
 property, and no default should be supplied, so the user is forced to make an
 active choice about which environment they wish the proxy to connect to.
 
-## Changes to workers
+## 4.10 Changes to workers
 
 * Workers that are started by a provisioner should fetch `TASKCLUSTER_ROOT_URL`
   from provisioner on start up
@@ -344,20 +372,20 @@ active choice about which environment they wish the proxy to connect to.
 * Workers should pass `TASKCLUSTER_ROOT_URL` to `taskcluster-proxy` when
   starting it up
 
-## Changes to tasks that use `taskcluster-proxy`
+## 4.11 Changes to tasks that use `taskcluster-proxy`
 
 * Tasks that made API calls directly to taskcluster-proxy, and not via a
   taskcluster client (e.g. using curl directly) should still work, since the
   proxy knows which taskcluster root url to use from how it was invoked by the
   worker. 
 
-## Changes to tasks that use a taskcluster-client
+## 4.12 Changes to tasks that use a taskcluster-client
 
 If these tasks use an old taskcluster-client, no changes required. Tasks using
 a new taskcluster client should make sure to set the TASKCLSUTER_ROOT_URL based
 on the env var given to them from the worker.
 
-## Changes to `taskcluster-lib-urls`
+## 4.13 Changes to `taskcluster-lib-urls`
 
 * Method `ServicesManifest` should be renamed to `APIReferencesManifest`.
 * The following new methods should be added, e.g. for go client:
@@ -369,22 +397,22 @@ func AMQPReference(rootURL string, version string) string
 
 These will return absolute urls to the `*-reference.json` documents.
 
-## Changes to building docs site
+## 4.14 Changes to building docs site
 
 The author has no knowledge of this process, and leaves it up to the
 implementor to decide.
 
-## Changes to taskcluster platform development lifecycle
+## 4.15 Changes to taskcluster platform development lifecycle
 
 The author has no knowledge of this process, and leaves it up to the
 implementor to decide.
 
-# Open Questions
+# 5. Open Questions
 
 <what is not decided yet? remove this section when it is empty, and then go to
 the final comment phase>
 
-# Implementation
+# 6. Implementation
 
 <once the RFC is decided, these links will provide readers a way to track the
 implementation through to completion>
