@@ -1,34 +1,33 @@
-# RFC 0128 - Client/worker/proxy interactions in redeployable taskcluster
+# RFC 0128 - Service metadata in redeployable taskcluster
 
 * Comments: [#128](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/128)
 * Proposed by: @petemoore
 
 # Table of contents
 
-   * [RFC 0128 - Provide docs/standards about client/worker/proxy interactions in redeployable taskcluster](#rfc-0128---provide-docsstandards-about-clientworkerproxy-interactions-in-redeployable-taskcluster)
-   * [1. Summary](#1-summary)
-      * [2. Motivation](#2-motivation)
-      * [3 How API definitions are managed today (pre-redeployability)](#3-how-api-definitions-are-managed-today-pre-redeployability)
-      * [4. Proposed changes](#4-proposed-changes)
-      * [4.1 Changes to publishing API manifest](#41-changes-to-publishing-api-manifest)
-      * [4.2 Changes to HTTP references format](#42-changes-to-http-references-format)
-      * [4.3 Changes to AMQP references format](#43-changes-to-amqp-references-format)
-      * [4.4 Changes to publication of API references and schemas](#44-changes-to-publication-of-api-references-and-schemas)
-      * [4.5 Changes to taskcluster client building procedure](#45-changes-to-taskcluster-client-building-procedure)
-         * [4.5.1 All language clients (go, java, node.js, python)](#451-all-language-clients-go-java-nodejs-python)
-         * [4.5.2 Language clients wihtout type code generation (node.js, python)](#452-language-clients-wihtout-type-code-generation-nodejs-python)
-      * [4.6 Changes to taskcluster client features and configuration](#46-changes-to-taskcluster-client-features-and-configuration)
-      * [4.7 Changes to adding taskcluster client as a service dependency](#47-changes-to-adding-taskcluster-client-as-a-service-dependency)
-      * [4.8 Changes to projects that depend on a taskcluster client](#48-changes-to-projects-that-depend-on-a-taskcluster-client)
-      * [4.9 Changes to taskcluster-proxy and its configuration](#49-changes-to-taskcluster-proxy-and-its-configuration)
-      * [4.10 Changes to workers](#410-changes-to-workers)
-      * [4.11 Changes to tasks that use taskcluster-proxy](#411-changes-to-tasks-that-use-taskcluster-proxy)
-      * [4.12 Changes to tasks that use a taskcluster-client](#412-changes-to-tasks-that-use-a-taskcluster-client)
-      * [4.13 Changes to taskcluster-lib-urls](#413-changes-to-taskcluster-lib-urls)
-      * [4.14 Changes to building docs site](#414-changes-to-building-docs-site)
-      * [4.15 Changes to taskcluster platform development lifecycle](#415-changes-to-taskcluster-platform-development-lifecycle)
-   * [5. Open Questions](#5-open-questions)
-   * [6. Implementation](#6-implementation)
+* [1. Summary](#1-summary)
+* [2. Motivation](#2-motivation)
+* [3. How API definitions are managed today (pre-redeployability)](#3-how-api-definitions-are-managed-today-pre-redeployability)
+* [4. Proposed changes](#4-proposed-changes)
+  * [4.1 Changes to publishing API manifest](#41-changes-to-publishing-api-manifest)
+  * [4.2 Changes to HTTP references format](#42-changes-to-http-references-format)
+  * [4.3 Changes to AMQP references format](#43-changes-to-amqp-references-format)
+  * [4.4 Changes to publication of API references and schemas](#44-changes-to-publication-of-api-references-and-schemas)
+  * [4.5 Changes to taskcluster client building procedure](#45-changes-to-taskcluster-client-building-procedure)
+    * [4.5.1 All language clients (go, java, node.js, python)](#451-all-language-clients-go-java-nodejs-python)
+    * [4.5.2 Language clients wihtout type code generation (node.js, python)](#452-language-clients-wihtout-type-code-generation-nodejs-python)
+  * [4.6 Changes to taskcluster client features and configuration](#46-changes-to-taskcluster-client-features-and-configuration)
+  * [4.7 Changes to adding taskcluster client as a service dependency](#47-changes-to-adding-taskcluster-client-as-a-service-dependency)
+  * [4.8 Changes to projects that depend on a taskcluster client](#48-changes-to-projects-that-depend-on-a-taskcluster-client)
+  * [4.9 Changes to taskcluster-proxy and its configuration](#49-changes-to-taskcluster-proxy-and-its-configuration)
+  * [4.10 Changes to workers](#410-changes-to-workers)
+  * [4.11 Changes to tasks that use taskcluster-proxy](#411-changes-to-tasks-that-use-taskcluster-proxy)
+  * [4.12 Changes to tasks that use a taskcluster-client](#412-changes-to-tasks-that-use-a-taskcluster-client)
+  * [4.13 Changes to taskcluster-lib-urls](#413-changes-to-taskcluster-lib-urls)
+  * [4.14 Changes to building docs site](#414-changes-to-building-docs-site)
+  * [4.15 Changes to taskcluster platform development lifecycle](#415-changes-to-taskcluster-platform-development-lifecycle)
+* [5. Open Questions](#5-open-questions)
+* [6. Implementation](#6-implementation)
 
 # 1. Summary
 
@@ -59,7 +58,7 @@ This RFC is needed in order to support the redeployability project (multiple
 deployments of taskcluster rather than just a single global deployment under
 taskcluster.net domain).
 
-## 3 How API definitions are managed today (pre-redeployability)
+## 3. How API definitions are managed today (pre-redeployability)
 
 Taskcluster services may publish reference schemas for each API they offer
 (referred to as an "API reference"). The API reference describes a given API
