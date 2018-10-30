@@ -287,8 +287,8 @@ eventually served.
 * The following new methods should be added, e.g. for go client:
 
 ```go
-func APIReference(rootURL string, version string) string
-func ExchangesReference(rootURL string, version string) string
+func APIReference(rootURL string, version string) string { .... }
+func ExchangesReference(rootURL string, version string) string { .... }
 ```
 
 These will return absolute urls to the `*-reference.json` documents,
