@@ -464,8 +464,7 @@ implementor to decide.
 
 # 5. Implementation
 
-<once the RFC is decided, these links will provide readers a way to track the
-implementation through to completion>
+Bugs:
 
-* <link to tracker bug, issue, etc.>
-* <...>
+* [Bug 1460015 - Set TASKCLUSTER_ROOT_URL for tasks and configure proxies to handle resulting requests](https://bugzil.la/1460015)
+* ...
