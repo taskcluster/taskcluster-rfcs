@@ -396,21 +396,26 @@ This is important because not all code will want to configure settings based on
 environment variables, for example workers that take their configuration from
 configuration files.
 
-## 4.8 Changes to adding taskcluster client as a service dependency
+## 4.8 Changes to services that depend on taskcluster client
 
-When upgrading to the new client, care will need to be taken to ensure that
-taskcluster root URL is passed into the client. In addition, the
-references/schemas that the client reads dynamically should also be a
-dependency of the project, which may be either frozen references/schemas,
-fetched from a language package, or fetched dynamically during build/CI from a
-taskcluster deployment.
+When upgrading a service to use the new client, care will need to be taken to
+ensure that taskcluster root URL is passed into the client. Either the client
+should be generated and checked in with the service, or a generated client
+should be released and version, which the service depends on.
 
 ## 4.9 Changes to projects that depend on a taskcluster client
 
-Those that depend on a client with generated code based on the content of the
-API references and schemas, should either run the code generation tool inside
-their project on an ad hoc basis, and check in the generated code, or should
-run it as part of their build/ci procedure.
+Most projects that depend on a client (such as workers, command line tools,
+etc) should consider generating a client, and vendoring it in their source code
+repository. This way they are in control of the version of the APIs that it is
+built against. Alternatively, as in the case of services that depend on a
+client, a global client can be versioned a nd released, and the project can
+depend on a specific version of the released client. Another option is to build
+the client against a deployed environment during the CI of the project, for
+example, building against the production environment that the tool is to be
+primarily used with. In this case, the project would depend on the client
+generator, and the client generator would then build the client as part of the
+CI of the project.
 
 All code that uses any of the new clients will need to explicitly pass in a
 root URL in a constructor, or explicitly call a method to fetch
