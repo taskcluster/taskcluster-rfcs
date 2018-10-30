@@ -427,6 +427,47 @@ is the root url of the deployment it should talk to. This should be a mandatory
 property, and no default should be supplied, so the user is forced to make an
 active choice about which environment they wish the proxy to connect to.
 
+In the current taskcluster clients, the mechanism to cause a taskcluster client
+to talk to a taskcluster proxy, rather than directly to a taskcluster
+deployment, is to configure the _base_ URL. For example, to do this using the
+taskcluster go client, calling code would look something like this:
+
+```go
+queue := tcqueue.New(nil)
+queue.BaseURL = "http://taskcluster/queue/v1"
+queue.SomeAPIMethod(.....)
+```
+
+In this setup, all `queue` methods would get routed through the taskcluster
+proxy to a URL of the form `http://taskcluster/<service>/<version>/<path>`.
+
+Unfortunately, the concept of base URL, which applied to a specific service (in
+this example, the Queue) will no longer be supported. This is a breaking change
+which has already landed.
+
+The new mechanism to cause a client to use a taskcluster proxy will be to
+configure the root URL as the root URL of the taskcluster proxy web service.
+This is typically `http://taskcluster` for most worker types, i.e. task code
+would look like this:
+
+```go
+queue := tcqueue.New(
+    &tcclient.Credentials{
+        RootURL: "http://taskcluster",
+    }
+)
+```
+
+Since API URLs are constructed using `taskcluster-lib-urls`, the client, not
+knowing that it is talking to a proxy, will construct a target URL of the form
+`http://taskcluster/api/<service>/<version>/<path>`, as dictated by the
+`taskcluster-lib-urls` library.
+
+Therefore, in order for taskcluster-proxy to be compatible with old clients and
+new clients, it will need to serve content also under `/api`, such that
+`/api/<service>/<version>/<path>` returns identical content to
+`/<service>/<version>/<path>`.
+
 ## 4.11 Changes to workers
 
 * Workers that are started by a provisioner should fetch `TASKCLUSTER_ROOT_URL`
