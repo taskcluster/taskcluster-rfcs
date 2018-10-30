@@ -462,7 +462,7 @@ implementor to decide.
 The author has no knowledge of this process, and leaves it up to the
 implementor to decide.
 
-# 6. Implementation
+# 5. Implementation
 
 <once the RFC is decided, these links will provide readers a way to track the
 implementation through to completion>
