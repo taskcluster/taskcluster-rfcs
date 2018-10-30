@@ -15,8 +15,6 @@
   * [4.4 Changes to publication of API references and schemas](#44-changes-to-publication-of-api-references-and-schemas)
   * [4.5 Changes to taskcluster-lib-urls](#45-changes-to-taskcluster-lib-urls)
   * [4.6 Changes to taskcluster client building procedure](#46-changes-to-taskcluster-client-building-procedure)
-    * [4.6.1 All language clients (go, java, node.js, python)](#461-all-language-clients-go-java-nodejs-python)
-    * [4.6.2 Language clients wihtout type code generation (node.js)](#462-language-clients-wihtout-type-code-generation-nodejs)
   * [4.7 Changes to taskcluster client features and configuration](#47-changes-to-taskcluster-client-features-and-configuration)
   * [4.8 Changes to adding taskcluster client as a service dependency](#48-changes-to-adding-taskcluster-client-as-a-service-dependency)
   * [4.9 Changes to projects that depend on a taskcluster client](#49-changes-to-projects-that-depend-on-a-taskcluster-client)
@@ -302,8 +300,6 @@ rootURL == 'https://taskcluster.net'
 
 ## 4.6 Changes to taskcluster client building procedure
 
-### 4.6.1 All language clients (go, java, node.js, python)
-
 For all of the supported language clients, there is a code generation step.
 There are two principle reasons for having a code generation step, when
 technically a client could interpret a set of references and schemas at
@@ -381,15 +377,6 @@ The code for the code generator will live in
 https://github.com/taskcluster/tc-client-generator, and therefore only needs to
 be updated when the code generation process changes, not when service API
 definitions change.
-
-### 4.6.2 Language clients wihtout type code generation (node.js)
-
-The only client that doesn't need rebuilding when there are schema/reference changes is the node.js client, which comes shipped with a apis.json file
-The clients that do not dynamically generate code (currently just node.js) still need to retain
-information from the API references and schemas. Those clients should be
-shipped together with a set of references and schemas, but provide the facility
-for these references and schemas to be refetched from a taskcluster deployment
-(specified by a taskcluster root URL).
 
 ## 4.7 Changes to taskcluster client features and configuration
 
