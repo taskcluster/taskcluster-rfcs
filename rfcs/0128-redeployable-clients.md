@@ -24,8 +24,7 @@
   * [4.13 Changes to tasks that use a taskcluster-client](#413-changes-to-tasks-that-use-a-taskcluster-client)
   * [4.14 Changes to building docs site](#414-changes-to-building-docs-site)
   * [4.15 Changes to taskcluster platform development lifecycle](#415-changes-to-taskcluster-platform-development-lifecycle)
-* [5. Open Questions](#5-open-questions)
-* [6. Implementation](#6-implementation)
+* [5. Implementation](#6-implementation)
 
 # 1. Summary
 
@@ -462,11 +461,6 @@ implementor to decide.
 
 The author has no knowledge of this process, and leaves it up to the
 implementor to decide.
-
-# 5. Open Questions
-
-<what is not decided yet? remove this section when it is empty, and then go to
-the final comment phase>
 
 # 6. Implementation
 
