@@ -52,7 +52,7 @@ different taskcluster deployments.
 
 This RFC is needed in order to support the redeployability project (multiple
 deployments of taskcluster rather than just a single global deployment under
-taskcluster.net domain).
+`taskcluster.net` domain).
 
 ## 3. How API definitions are managed today (pre-redeployability)
 
@@ -61,7 +61,7 @@ Taskcluster services may publish reference schemas for each API they offer
 interface to the service in a structured form.
 
 There is a single API manifest which lists all API references, hosted at
-[https://references.taskcluster.net/manifest.json].
+(https://references.taskcluster.net/manifest.json).
 
 API references are structured json documents which describe an API that a
 service provides. These json documents declare a json schema document that they
