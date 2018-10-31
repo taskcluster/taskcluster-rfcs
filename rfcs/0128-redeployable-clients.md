@@ -38,8 +38,7 @@ This RFC defines:
 * how taskcluster client generators will fetch and interpret an API manifest in
   order to discover references and schemas to build the clients against
 * how the architecture of the generated clients will change
-* how generated clients and client generators will be built, released and
-  deployed
+* how generated clients and client generators will be built and released
 * how consumers of clients (workers, worker authentication proxies, command
   line tools, software libraries) must be adapted to use the new clients
 
