@@ -532,6 +532,9 @@ new clients, it will need to serve content also under `/api`, such that
   from provisioner configuration (no default allowed)
 * Workers should pass `TASKCLUSTER_ROOT_URL` environment variable to all task
   processes they create.
+* If taskcluster proxy is enabled, workers should pass `TASKCLUSTER_PROXY_URL`
+  environment variable to all task processes they create (typically
+  `http://taskcluster`).
 * Workers should pass `TASKCLUSTER_ROOT_URL` to `taskcluster-proxy` when
   starting it up
 
@@ -541,6 +544,13 @@ new clients, it will need to serve content also under `/api`, such that
   taskcluster client (e.g. using curl directly) should still work, since the
   proxy knows which taskcluster root url to use from how it was invoked by the
   worker. 
+
+* Now tasks will have two environment variables (see section 4.11) that they
+  can potentially use for setting the root URL of a taskcluster client:
+  `TASKCLUSTER_PROXY_URL` and `TASKCLUSTER_ROOT_URL`. This gives them the
+  freedom to refer to either the proxy or the target service, as required.
+  Since they must explicitly configure the root url when using a taskcluster
+  client, both endpoints are at their disposal, based on what they wish to do.
 
 ## 4.13 Changes to tasks that use a taskcluster-client
 
