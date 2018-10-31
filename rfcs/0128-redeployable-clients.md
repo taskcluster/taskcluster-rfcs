@@ -111,10 +111,10 @@ The development workflow typically looks like this:
 ## 4.1 Changes to publishing API manifest
 
 1. If a service of a taskcluster deployment provides an API interface, the
-   cluster may host the API reference document under
+   API reference document should be hosted under
    `<TASKCLUSTER_ROOT_URL>/references/<serviceName>/<version>/api.json`
 2. If a service of a taskcluster deployment provides an Exchanges interface,
-   the cluster may host the exchanges reference document under
+   the exchanges reference document should be hosted under
    `<TASKCLUSTER_ROOT_URL>/references/<serviceName>/<version>/exchanges.json`
 3. A taskcluster deployment must serve the API references manifest under
    `<TASKCLUSTER_ROOT_URL>/references/manifest.json` with the following format:
@@ -251,12 +251,12 @@ from `<TASKCLUSTER_ROOT_URL>/schemas/base/v1/exchanges-reference.json`.
 ## 4.4 Changes to publication of API references and schemas
 
 The implementation must serve the described resources under the given URLs set
-out in this document. The author is not concerned with how a service declares
+out in this document. The RFC is not concerned with how a service declares
 its API references to the platform during build/deploy stages in order that the
 references are included in the API references manifest, that is a matter for
-the implementor.
+the implementation.
 
-The author considers it reasonable though, that there could be an API endpoint
+The RFC considers it reasonable though, that there could be an API endpoint
 that enables services to register their API references with the taskcluster
 platform when they start up. An advantage of this approach (rather than burning
 this information into the build/deploy steps) is that a taskcluster platform
@@ -274,7 +274,7 @@ them as they see fit while the taskcluster core platform is running without any
 maintenance overhead.
 
 But we may wish to implement such a thing in a future PR - for the time being,
-the author does not care about the publish mechanism, only that the content is
+the RFC does not care about the publish mechanism, only that the content is
 eventually served.
 
 ## 4.5 Changes to `taskcluster-lib-urls`
@@ -491,16 +491,6 @@ new clients, it will need to serve content also under `/api`, such that
 If these tasks use an old taskcluster-client, no changes required. Tasks using
 a new taskcluster client should make sure to set the TASKCLSUTER_ROOT_URL based
 on the env var given to them from the worker.
-
-## 4.14 Changes to building docs site
-
-The author has no knowledge of this process, and leaves it up to the
-implementor to decide.
-
-## 4.15 Changes to taskcluster platform development lifecycle
-
-The author has no knowledge of this process, and leaves it up to the
-implementor to decide.
 
 # 5. Implementation
 
