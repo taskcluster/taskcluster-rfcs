@@ -61,7 +61,7 @@ Taskcluster services may publish reference schemas for each API they offer
 interface to the service in a structured form.
 
 There is a single API manifest which lists all API references, hosted at
-(https://references.taskcluster.net/manifest.json).
+https://references.taskcluster.net/manifest.json.
 
 API references are structured json documents which describe an API that a
 service provides. These json documents declare a json schema document that they
