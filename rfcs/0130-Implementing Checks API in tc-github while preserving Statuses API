@@ -1,6 +1,6 @@
-# RFC 130 - Implementing Checks API
+# RFC 131 - Implementing Checks API
 * Comments: [#130](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/130)
-* Proposed by: @djmitche
+* Proposed by: @djmitche, @owlishDeveloper (author of this document)
 
 # Summary
 
