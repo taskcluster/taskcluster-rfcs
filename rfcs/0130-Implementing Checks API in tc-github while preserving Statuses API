@@ -23,15 +23,16 @@ rely on them.
 # Details
 
 Currently we create a task and a status in a single function that listens
-to github webhooks. The idea is to create a task in separate function that listens to webhooks;
-then listen to the pulse message (`task defined`? `artifact created`?) on a certain queue that signals about creation of a task.
-The messages would go to this or that queue based on some indication in `taskcluster.yml` - basically, "use Checks API" or the
-absence of "use Checks API". The presence of thet indication would result in adding a route (like a path to a queue?)
-to the task definition.
+to github webhooks. The idea is to create a task in separate function that listens to webhooks and creates tasks;
+then listen to the pulse message (namely, `task defined`) on a certain queue that signals about creation of a task.
+The messages would go to this or that queue based on some indication in `taskcluster.yml` - like a line `reporting: 'checks-v1'`.
+The presence of that indication would result in adding a route (like a path to a queue?) to the task definition.
+We can also have something like `reporting: ['github-checks', 'github-statuses', 'irc://irc.mozilla.org:6667/#myproject']`
+to report through various channels.
 
 So we would have two separate listeners for `task created` event, one would create statuses using Checks API, and another 
 would use Statuses API. Similarly, status updates would come in through separate channels as well, so we would have two 
-separate sets of status listeners as well - one for updating status indicators through Statuses API, and another through Checks.
+separate sets of status listeners - one for updating status indicators through Statuses API, and another through Checks.
 
 # Open Questions
 
