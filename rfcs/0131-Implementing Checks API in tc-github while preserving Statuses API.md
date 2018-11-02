@@ -30,6 +30,8 @@ The presence of that indication would result in adding a route (like a path to a
 We can also have something like `reporting: ['github-checks', 'github-statuses', 'irc://irc.mozilla.org:6667/#myproject']`
 to report through various channels.
 
+Users will have options to enable either Status API or Checks API, as well as enable both.
+
 So we would have two separate listeners for `task created` event, one would create statuses using Checks API, and another 
 would use Statuses API. Similarly, status updates would come in through separate channels as well, so we would have two 
 separate sets of status listeners - one for updating status indicators through Statuses API, and another through Checks.
