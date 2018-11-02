@@ -22,19 +22,31 @@ rely on them.
 
 # Details
 
+### The general idea
 Currently we create a task and a status in a single function that listens
 to github webhooks. The idea is to create a task in separate function that listens to webhooks and creates tasks;
 then listen to the pulse message (namely, `task defined`) on a certain queue that signals about creation of a task.
-The messages would go to this or that queue based on some indication in `taskcluster.yml` - like a line `reporting: 'checks-v1'`.
-The presence of that indication would result in adding a route (like a path to a queue?) to the task definition.
+The messages would go to this or that queue based on some indication in `taskcluster.yml` - like a line `reporting: 'checks-v1'`
+in a task definition.
+
+### Details on the user interface
+The user interface in this case is `.taskcluster.yml`. The presence of the indication in the `.taskcluster.yml` would 
+result in adding a route (like a path to a queue?) to the task.
 We can also have something like `reporting: ['github-checks', 'github-statuses', 'irc://irc.mozilla.org:6667/#myproject']`
-to report through various channels.
+to report through various channels. Status API will be enabled by default for all tasks; Checks API will be disabled
+for all tasks. Users will be able to set up either Statuses API or Checks API, as well as both for each individual task.
 
-Users will have options to enable either Status API or Checks API, as well as enable both.
-
-So we would have two separate listeners for `task created` event, one would create statuses using Checks API, and another 
+### Details on the Backend
+We would have two separate sets of listeners for `task defined` event - one would create statuses using Checks API, and another 
 would use Statuses API. Similarly, status updates would come in through separate channels as well, so we would have two 
 separate sets of status listeners - one for updating status indicators through Statuses API, and another through Checks.
+
+### Decision tasks and dependencies
+It's not possible to create several check-suites (sets of checkruns) for each individual revision, commit or PR. Therefore,
+we must treat certain tasks with dependencies as a single checkrun, giving that checkrun the subgroup status to display
+on GitHub. Envisioning @dustin's desire to make this as customizable as possible, we would make it possible for users
+to set this in `.taskcluster.yml` for each individual task. The default would probably be 1:1 mapping from tasks to
+checkruns (each task will have a checkrun, even if it's a dependency or task started by a decision task).
 
 # Open Questions
 
