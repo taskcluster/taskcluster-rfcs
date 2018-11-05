@@ -4,37 +4,39 @@ So, how do I use this?
 
 ## I Have an Idea!
 
-Open an issue! Issues should either be more than a week's work, or potentially controversial.  Anything else can just be filed as a bug (assigned to yourself, of course).
-
 Ideas should have
  * a pretty specific goal: a user story ("Users can..."), dependency ("This will allow ..") or a completion condition ("All services .."); and
  * some vague idea of how this might be accomplished, or a few alternatives.
 
-You can leave the issue un-assigned, or assign it to yourself if you intend to champion it.
-Shop the issue around to the team to try to get a diversity of opinions on it.
+If you have an idea, here's how to get started:
+
+* Copy [`template.txt`](template.txt) to `rfcs/xxxx-<rfc-title>.md`.
+  Fill in the first few sections, but feel free to leave things TBD at this stage.
+  Commit it to a branch, push, and make a pull request.
+
+* Once you have the pull request number, modify the filename to include it (`rfcs/<number>-<rfc-title>.md`).
+  Replace `<number>` in the file with the PR number as well.
+  Push again.
+
+You can leave the PR un-assigned, or assign it to yourself if you intend to champion it.
+Shop the issue around to the team and outside the team to try to get a diversity of opinions on it.
 It's OK to leave ideas open indefinitely, awaiting their time.
 
 ## I Have an Opinion!
 
-Comment on the issue.
-The issues are intended to record the discussion on the idea, so that's the right place.
+Comment on the pull request.
+The Github comments are intended to record the discussion on the idea, so that's the right place.
 
-As decisions are made, the assignee will update the first comment to represent that consensus.
+As the discussion evolves, the assignee will update the Markdown file to match.
 
 ## Let's Decide!
 
-### Write a Proposal
+When everyone is more or less on the same page, it's time to move to the proposal phase.
 
-* Copy [`template.txt`](template.txt) to `rfcs/1234-rfc-title.md` where `1234` is
-  the issue number (padded to four digits with zeroes).  Edit the file to fill in
-  the necessary information, including the issue number, and commit it to a
-  branch.
+### Make a Proposal
 
-* Next, use the [issue2pr app](http://issue2pr.herokuapp.com/) or the [git
-  extension](https://github.com/djmitche/git-issue2pr) to convert your issue into
-  a pull request with the same number.  Pretty neat!
-
-* Finally, label it `Phase: Proposal`.
+Fill in the remainder of the template, including lots of details, based on the preceding discussion.
+Push your changes and add the label `Phase: Proposal` to the PR.
 
 ### Request Comments
 
