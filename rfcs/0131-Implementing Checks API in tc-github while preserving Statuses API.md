@@ -45,9 +45,11 @@ separate sets of status listeners - one for updating status indicators through S
 It's not possible to create several check-suites (sets of checkruns) for each individual revision, commit or PR. Therefore,
 we must treat certain tasks with dependencies as a single checkrun, giving that checkrun the subgroup status to display
 on GitHub. Envisioning @dustin's desire to make this as customizable as possible, we would make it possible for users
-to set this in `.taskcluster.yml` for each individual task. The default would probably be 1:1 mapping from tasks to
-checkruns (each task will have a checkrun, even if it's a dependency or task started by a decision task) 
-- we can iterate on this in the later versions.
+to set this in `.taskcluster.yml` for each individual task.
+
+An initial version will just map each task to a checkrun inside a checksuite.
+Later we can either bump the version or in a backward-compatible way allow people to create some sort of artifact 
+that specifies which runs they want us to report and how.
 
 # Open Questions
 
