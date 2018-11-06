@@ -46,7 +46,8 @@ It's not possible to create several check-suites (sets of checkruns) for each in
 we must treat certain tasks with dependencies as a single checkrun, giving that checkrun the subgroup status to display
 on GitHub. Envisioning @dustin's desire to make this as customizable as possible, we would make it possible for users
 to set this in `.taskcluster.yml` for each individual task. The default would probably be 1:1 mapping from tasks to
-checkruns (each task will have a checkrun, even if it's a dependency or task started by a decision task).
+checkruns (each task will have a checkrun, even if it's a dependency or task started by a decision task) 
+- we can iterate on this in the later versions.
 
 # Open Questions
 
@@ -56,4 +57,5 @@ of scheduler ID. I'll be going through the docs today, but if you have any relev
 # Implementation
 
 * [pull request](https://github.com/taskcluster/taskcluster-github/pull/278)
-* [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1459645)
+* [general bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1459645)
+* [first phase bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1505169)
