@@ -42,6 +42,17 @@ or
 queue = new taskcluster.Queue({fromEnvVars: true});
 ```
 
+## Standardized Variables
+
+This RFC also serves to standardize the meanings of the following environment variables.
+These meanings capture the current *de facto* meanings.
+
+ * `TASKCLUSTER_CLIENT_ID` - the `clientId` for API requests
+ * `TASKCLUSTER_ACCESS_TOKEN` - the corresponding `accessToken` for API requests
+ * `TASKCLUSTER_CERTIFICATE` - if present, a JSON-formatted temporary credential certificate.  In this case, `TASKCLUSTER_CLIENT_ID` and `TASKCLUSTER_ACCESS_TOKEN` are defined as described in [the temporary credentials documentation](https://docs.taskcluster.net/docs/manual/design/apis/hawk/temporary-credentials).  NOTE: users are not expected to decode this string.
+ * `TASKCLUSTER_ROOT_URL` - the root URL of the cluster to which API requests should be made
+ * `TASKCLUSTER_PROXY_URL` - if present, the root URL of a `taskcluster-proxy` instance suitable for accessing the Taskcluster deployment in which the current task is running (defined in [RFC 0128](https://github.com/taskcluster/taskcluster-rfcs/blob/master/rfcs/0128-redeployable-clients.md))
+
 ## Taskcluster-CLI
 
 The `taskcluster-cli` application is often referred to as a "shell client library".
