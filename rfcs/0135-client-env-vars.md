@@ -72,7 +72,7 @@ This was released in version 10.0.0.
 
 ## Go
 
-The Go client does not read environment variables directly and does not support root URLs at all.
+The Go client does not read environment variables directly and does not [yet](https://bugzilla.mozilla.org/show_bug.cgi?id=1428422) support root URLs at all.
 (That is, it is already compliant with this RFC)
 
 ## Java
