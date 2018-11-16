@@ -432,21 +432,11 @@ definitions change.
 
 ## 4.7 Changes to taskcluster client features and configuration
 
-Constructors for clients should require the rootURL to be explicitly provided,
-i.e. no default. This is in order to ensure that the choice of deployed cluster
-to connect to is an active one. The client may provide a utility methods to fetch
-`TASKCLUSTER_ROOT_URL` from the environment, but it should not be assumed that if
-this environment variable exists, that it should be used. Rather, code that calls
-the taskcluster client should have to explicitly declare they wish to do so, for
-example:
+When accepting configuration, clients will expect a root URL as well as the
+usual credentials.  Since there is no "default cluster", there is no default
+for the root URL.
 
-```
-queue := queue.NewFromEnvVars()
-```
-
-This is important because not all code will want to configure settings based on
-environment variables, for example workers that take their configuration from
-configuration files.
+How this configuration is received by the client is not covered by this RFC.
 
 ## 4.8 Changes to services that depend on taskcluster client
 
