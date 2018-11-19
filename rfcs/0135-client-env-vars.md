@@ -99,4 +99,4 @@ Thus, the upgrade from 5.x (for Python) or 10.x (for JS) will require some cauti
 
 # Implementation
 
-TBD
+https://bugzilla.mozilla.org/show_bug.cgi?id=1508333
