@@ -1,4 +1,3 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/taskcluster/taskcluster-rfcs.png?columns=all)](https://waffle.io/taskcluster/taskcluster-rfcs?utm_source=badge)
 # TaskCluster RFCs
 
 * [Issues](https://github.com/taskcluster/taskcluster-rfcs/issues) are RFCs in development, not yet in the proposal stage;
