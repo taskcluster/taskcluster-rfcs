@@ -63,7 +63,9 @@ This scope expression template registration will be implemented roughly as follo
 1. Auth service will grow an `authorize()` endpoint that will take as input an operation, a clientId, and a set of
    parameters that will be substituted into the operation's scope expression template in order to turn it into a
    scope expression. The endpoint will return a simple yes/no answer as to whether or not the clientId in question
-   has sufficient scopes to satisfy the scope expression with those parameters.
+   has sufficient scopes to satisfy the scope expression with those parameters. Either this endpoint or another one
+   must still support sending a set of scopes, rather than just a clientId in order to support workers checking
+   the scopes field of tasks.
 1. Update all of our worker implementations (generic worker and script worker) to register their operation somehow.
    Each worker will be represented by a single operation whose scope expression has many `if` statements for each
    feature the worker supports. I expect that worker-manager will actually register these with auth to avoid
