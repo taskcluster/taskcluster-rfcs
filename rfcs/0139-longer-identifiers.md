@@ -24,7 +24,7 @@ We will define two types of identifiers:
   * `schedulerId`
   * `organization`, `repository` (in tc-github)
 
-* "slugids" -- up to 22 characters, always a slugid
+* "slugids" -- exactly 22 characters, always a slugid
   * `taskGroupId`
   * `taskId`
 
