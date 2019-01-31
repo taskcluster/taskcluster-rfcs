@@ -119,17 +119,10 @@ significantly less granularity.
 
 # Open Questions
 
-Many of the finer points of this are quite hand-wavy. We can try to button things down a bit before
-moving forward if we like.
-
 This does require auth to be running for any other service to start. Maybe we can be smart by retrying
 registration until auth is running or just always checking to see if auth has the most recent version
 of the definition every time we call `authorize()`?
 
 # Implementation
 
-<once the RFC is decided, these links will provide readers a way to track the
-implementation through to completion>
-
-* <link to tracker bug, issue, etc.>
-* <...>
+* [Bug 1524341](https://bugzilla.mozilla.org/show_bug.cgi?id=1524341)
