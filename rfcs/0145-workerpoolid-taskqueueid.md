@@ -76,7 +76,7 @@ It is also a fairly simple change to ask those users to adapt to.
 
 # Credits
 
-Thanks to @imbstack and @owlish for discussion of this issue, and to @owlish in particular for suggesting the identifier names.
+Thanks to @imbstack and @owlish for discussion of this issue, to @owlish in particular for suggesting the identifier names, and to @petemoore for proposing the name `workerPoolId`.
 
 # Links
 
