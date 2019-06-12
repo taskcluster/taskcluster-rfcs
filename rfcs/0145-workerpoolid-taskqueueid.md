@@ -60,7 +60,7 @@ When the transition to this proposal is complete, these properties should be rep
 
 During the transition, however, the queue must both accomodate input from old and new clients, and produce output that new and old clients can interpret.
 To do so, the `createTask` API method will accept a task definition with either `provisionerId` + `workerType` or `taskQueueId`, translating the former internally into a `taskQueueId`.
-The `task` API method (which returns a task) will return task definitions containing all three fields, allowing interpretation by either old new clients.
+The `task` API method (which returns a task) will return task definitions containing all three fields, allowing interpretation by either old or new clients.
 
 ## Sunsetting the Old Identifiers
 
