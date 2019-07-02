@@ -12,15 +12,13 @@
 
 # Details
 
-<how will this be implemented? what does it depend on? what are the
-compatibility concerns?
+<how will this be implemented?
+ what does it depend on?
+ what are the compatibility concerns?
+ are there security or performance implications?
+ how will this be implemented?>
 
-# Open Questions
-
-<what isn't decided yet? remove this section when it is empty, and then go to
-the final comment phase>
-
-# Implementation
+# Implementation Links
 
 <once the RFC is decided, these links will provide readers a way to track the
 implementation through to completion>
