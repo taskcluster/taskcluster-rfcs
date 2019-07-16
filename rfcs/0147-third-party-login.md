@@ -227,5 +227,4 @@ Later improvements may replace this approach with a more robust solution based o
 <once the RFC is decided, these links will provide readers a way to track the
 implementation through to completion>
 
-* <link to tracker bug, issue, etc.>
-* <...>
+* https://bugzilla.mozilla.org/show_bug.cgi?id=1561905
