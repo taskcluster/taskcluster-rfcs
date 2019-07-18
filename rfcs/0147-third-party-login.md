@@ -81,6 +81,11 @@ The "big picture" here is that a Taskcluster deployment acts as an OAuth2 author
 The "resource" that the deployment protects is temporary Taskcluster credentials.
 Thus a client carries out a standard OAuth2 authorization transaction, then uses the resulting `access_token` to request Taskcluster credentials as needed.
 
+The deviations from OAuth2 are as follows:
+
+ * The `scope` arguments are Taskcluster scopes, with `*` carrying its usual meaning; and
+ * The authorize request has an nonstandard, optional `expires` query parameter.
+
 ### OAuth2
 
 Taskcluster implements the [OAuth2 protocol](https://tools.ietf.org/html/rfc6749), supporting both the "Implicit" and "Authorization Code" flows.
