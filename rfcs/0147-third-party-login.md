@@ -213,6 +213,15 @@ The client indicated in the credentials has the clientId described above, and as
 It will be automatically disabled if the user's access no longer satisfies its scopes.
 The client can also be disabled or deleted manually in the event of compromise.
 
+## Transition Period
+
+The new flow proposed here will be implemented on the new deployment scheduled to go into production in September 2019.
+The existing deployment, https://taskcluster.net, will be in production until that time and will not be modified to implement this proposal.
+
+In order to allow existing third-party implementers time to adopt the new flow, we will keep the [current implementation](#current-implementation) running at its current location, `https://login.taskcluster.net`, modifying its settings to generate credentials appropriate to the new deployment.
+This should allow consumers of that service to continue operating properly even after the September cutover.
+We will encourage and support such third-parties in migrating to the new flow, after which time we will shut down the old login service.
+
 ## Client Registration
 
 The initial implementation of this proposal will "register" clients by including them in the deployment configuration of the web-server service.
