@@ -25,7 +25,7 @@ Examples:
 * `google/us-east1-c`
 * `onprem/pdx1`
 
-Workers will always supply a value in this variable, falling back to `unknown/unknown` if no value is known.
+If no location is available, workers will not set this variable.
 
 ## Implementation Details
 
