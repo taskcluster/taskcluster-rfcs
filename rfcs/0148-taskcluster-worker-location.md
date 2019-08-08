@@ -15,24 +15,30 @@ Taskcluster does not currently provide this in a documented, supported fashion.
 # Details
 
 This proposes to introduce `$TASKCLUSTER_WORKER_LOCATION` as an environment variable available within tasks run by docker-worker and generic-worker.
-
-The content has the format `<cloud>/<details>`.
-The `<cloud>` portion will correspond to the provider types used within worker-manager (e.g., `google`, `amazon`).
-The `<details>` portion is specific to the cloud.
-Tasks not executed in any cloud (e.g., static or standalone workers) can define arbitrary locations.
-Examples:
-* `amazon/us-east-1b`
-* `google/us-east1-c`
-* `onprem/pdx1`
-
+The variable's value is a short chunk of JSON, with a top-level object.
 If no location is available, workers will not set this variable.
 
-## Implementation Details
+That object must always have property `cloud`.
+The remaining properties depend on the value of that property, but are fixed for each such value.
+For example, if cloud is `amazon`, then a well-defined set of additional properties will always exist.
+
+The precise structure for each cloud will be defined by the configuration for the workers.
+In cases where worker startup is handled by `taskcluster-worker-runner`, it will be defined in that tool's documentation.
+
+## Implementation
+
+### Determining Location
 
 Taskcluster-worker-runner already posesses special-case code for each cloud, and makes queries to those clouds' metadata services.
 As such, it is well-suited to determine the location in each cloud.
 
 It will pass this information on to workers as a configuration option, and the workers will include it in the task environment.
+
+### Parsing
+
+Since the value is in a JSON format, it is not easily used in a shell script.
+Use of `grep` to parse the value is strongly discouraged.
+The [`jq`](https://stedolan.github.io/jq/) utility can be useful, e.g., `echo $TASKCLUSTER_WORKER_LOCATION | jq -r .cloud`;
 
 ## Documentation
 
