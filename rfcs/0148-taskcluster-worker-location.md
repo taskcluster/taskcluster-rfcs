@@ -21,9 +21,11 @@ If no location is available, workers will not set this variable.
 That object must always have property `cloud`.
 The remaining properties depend on the value of that property, but are fixed for each such value.
 For example, if cloud is `amazon`, then a well-defined set of additional properties will always exist.
+The term "cloud" is used loosely as a category of location, and need not correspond to a commercial cloud provider.
+For example, users deploying Taskcluster might define "clouds" such as `onprem` or `macstadium`.
 
 The precise structure for each cloud will be defined by the configuration for the workers.
-In cases where worker startup is handled by `taskcluster-worker-runner`, it will be defined in that tool's documentation.
+In cases where worker startup is handled by providers in `taskcluster-worker-runner`, it will be defined in that tool's documentation.
 
 ## Implementation
 
