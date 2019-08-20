@@ -1,5 +1,5 @@
 # RFC 8 - JSON-e
-* Comments: [#8](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/8)
+* Comments: [#8](https://github.com/taskcluster/taskcluster-rfcs/pull/8)
 * Initially Proposed by: @djmitche
 
 # Proposal

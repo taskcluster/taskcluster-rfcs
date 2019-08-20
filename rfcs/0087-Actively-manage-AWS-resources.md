@@ -1,5 +1,5 @@
 # RFC 87 - Actively manage AWS resources
-* Comments: [#87](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/87)
+* Comments: [#87](https://github.com/taskcluster/taskcluster-rfcs/pull/87)
 * Initially Proposed by: @djmitche
 
 # Proposal

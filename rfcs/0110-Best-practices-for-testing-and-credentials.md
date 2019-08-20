@@ -1,5 +1,5 @@
 # RFC 110 - Best Practices for testing and Credentials
-* Comments: [#110](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/110)
+* Comments: [#110](https://github.com/taskcluster/taskcluster-rfcs/pull/110)
 * Proposed by: @djmitche
 
 # Summary

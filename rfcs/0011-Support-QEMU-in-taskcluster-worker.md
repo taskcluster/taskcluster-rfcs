@@ -1,5 +1,5 @@
 # RFC 11 - Support QEMU in taskcluster-worker
-* Comments: [#11](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/11)
+* Comments: [#11](https://github.com/taskcluster/taskcluster-rfcs/pull/11)
 * Initially Proposed by: @djmitche
 
 # Summary

@@ -1,5 +1,5 @@
 # RFC 82 - Users should be able to administer workers across provisioner boundaries
-* Comments: [#82](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/82)
+* Comments: [#82](https://github.com/taskcluster/taskcluster-rfcs/pull/82)
 * Initially Proposed by: @gregarndt
 
 # Proposal

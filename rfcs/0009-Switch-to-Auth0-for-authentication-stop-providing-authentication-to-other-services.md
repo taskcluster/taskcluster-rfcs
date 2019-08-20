@@ -1,5 +1,5 @@
 # RFC 9 - Switch to Auth0 for authentication, stop providing authentication to other services
-* Comments: [#9](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/9)
+* Comments: [#9](https://github.com/taskcluster/taskcluster-rfcs/pull/9)
 * Initially Proposed by: @djmitche
 
 # Proposal

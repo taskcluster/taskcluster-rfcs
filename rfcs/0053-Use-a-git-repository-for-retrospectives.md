@@ -1,5 +1,5 @@
 # RFC 53 - Use a git repository for retrospectives
-* Comments: [#53](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/53)
+* Comments: [#53](https://github.com/taskcluster/taskcluster-rfcs/pull/53)
 * Initially Proposed by: @imbstack
 
 # Proposal

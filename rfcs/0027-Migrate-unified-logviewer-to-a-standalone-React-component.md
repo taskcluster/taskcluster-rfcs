@@ -1,5 +1,5 @@
 # RFC 27 - Migrate unified-logviewer to a standalone React component
-* Comments: [#27](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/27)
+* Comments: [#27](https://github.com/taskcluster/taskcluster-rfcs/pull/27)
 * Initially Proposed by: @eliperelman
 
 # Proposal

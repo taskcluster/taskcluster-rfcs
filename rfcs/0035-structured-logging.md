@@ -1,5 +1,5 @@
 # RFC 35 - Structured Logging
-* Comments: [#35](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/35)
+* Comments: [#35](https://github.com/taskcluster/taskcluster-rfcs/pull/35)
 * Proposed by: @jhford (originator), @djmitche, @imbstack (author of this document)
 
 # Summary

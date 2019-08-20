@@ -1,5 +1,5 @@
 # RFC 74 - Worker, workerType, and provisioner explorer UI
-* Comments: [#74](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/74)
+* Comments: [#74](https://github.com/taskcluster/taskcluster-rfcs/pull/74)
 * Initially Proposed by: @djmitche
 
 # Proposal

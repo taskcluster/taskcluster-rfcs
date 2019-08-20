@@ -1,5 +1,5 @@
 # RFC 48 - Parameterized Roles
-* Comments: [#48](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/48)
+* Comments: [#48](https://github.com/taskcluster/taskcluster-rfcs/pull/48)
 * Initially Proposed by: @djmitche
 
 # Proposal

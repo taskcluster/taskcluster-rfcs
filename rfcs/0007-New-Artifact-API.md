@@ -1,5 +1,5 @@
 # RFC 7 - New Artifact API
-* Comments: [#7](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/7)
+* Comments: [#7](https://github.com/taskcluster/taskcluster-rfcs/pull/7)
 * Initially Proposed by: @djmitche
 
 # Proposal

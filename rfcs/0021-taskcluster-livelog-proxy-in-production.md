@@ -1,5 +1,5 @@
 # RFC 21 - taskcluster-livelog-proxy in production
-* Comments: [#21](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/21)
+* Comments: [#21](https://github.com/taskcluster/taskcluster-rfcs/pull/21)
 * Initially Proposed by: @djmitche
 
 # Proposal

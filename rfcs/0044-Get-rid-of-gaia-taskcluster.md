@@ -1,5 +1,5 @@
 # RFC 44 - Get rid of gaia-taskcluster
-* Comments: [#44](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/44)
+* Comments: [#44](https://github.com/taskcluster/taskcluster-rfcs/pull/44)
 * Initially Proposed by: @djmitche
 
 # Proposal

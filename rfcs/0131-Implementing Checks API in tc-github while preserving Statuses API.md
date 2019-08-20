@@ -1,5 +1,5 @@
 # RFC 131 - Implementing Checks API
-* Comments: [#130](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/130)
+* Comments: [#130](https://github.com/taskcluster/taskcluster-rfcs/pull/130)
 * Proposed by: @djmitche, @owlishDeveloper (author of this document)
 
 # Summary

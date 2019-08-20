@@ -1,5 +1,5 @@
 # RFC 24 - Decouple components from routing mechanisms
-* Comments: [#24](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/24)
+* Comments: [#24](https://github.com/taskcluster/taskcluster-rfcs/pull/24)
 * Initially Proposed by: @eliperelman
 
 # Proposal
