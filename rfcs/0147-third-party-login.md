@@ -1,5 +1,5 @@
 # RFC 147 - Third-Party Login
-* Comments: [#147](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/147)
+* Comments: [#147](https://github.com/taskcluster/taskcluster-rfcs/pull/147)
 * Proposed by: @djmitche
 
 # Background
@@ -59,7 +59,6 @@ The page presents the requested information to the user for consent, and then re
 
 ## Requirements
 
-* Support command-line logins
 * Support third-party logins
 * Support issuing limited-authorization credentials
 * Support whitelisting some third parties
@@ -78,7 +77,7 @@ The result is similar to a normal OAuth authorization-code flow, but resulting i
 ## Implementation
 
 The "big picture" here is that a Taskcluster deployment acts as an OAuth2 authorization server and resource server.
-The "resource" that the deployment protects is temporary Taskcluster credentials.
+The "resource" that the deployment protects is Taskcluster credentials.
 Thus a client carries out a standard OAuth2 authorization transaction, then uses the resulting `access_token` to request Taskcluster credentials as needed.
 
 The deviations from OAuth2 are as follows:
@@ -212,6 +211,8 @@ The `expires` property gives the expiration time for the given credentials, and 
 The client indicated in the credentials has the clientId described above, and as such is scanned periodically for alignment with the associated user's access.
 It will be automatically disabled if the user's access no longer satisfies its scopes.
 The client can also be disabled or deleted manually in the event of compromise.
+
+This endpoint does not produce temporary credentials, as such credentials are not revocable.
 
 ## Transition Period
 
