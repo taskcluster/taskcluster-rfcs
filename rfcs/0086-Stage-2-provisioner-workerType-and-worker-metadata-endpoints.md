@@ -1,5 +1,5 @@
 # RFC 86 - Stage 2: provisioner, workerType, and worker metadata endpoints
-* Comments: [#86](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/86)
+* Comments: [#86](https://github.com/taskcluster/taskcluster-rfcs/pull/86)
 * Initially Proposed by: @helfi92
 
 # Proposal

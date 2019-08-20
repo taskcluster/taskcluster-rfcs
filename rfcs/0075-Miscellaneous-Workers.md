@@ -1,5 +1,5 @@
 # RFC 75 - Miscellaneous Workers
-* Comments: [#75](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/75)
+* Comments: [#75](https://github.com/taskcluster/taskcluster-rfcs/pull/75)
 * Initially Proposed by: @djmitche
 
 

@@ -1,5 +1,5 @@
 # RFC 90 - Disabling/enabling a worker
-* Comments: [#90](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/90)
+* Comments: [#90](https://github.com/taskcluster/taskcluster-rfcs/pull/90)
 * Initially Proposed by: @helfi92
 
 # Proposal

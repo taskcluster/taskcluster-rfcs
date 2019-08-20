@@ -1,5 +1,5 @@
 # RFC 34 - Audit logging
-* Comments: [#34](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/34)
+* Comments: [#34](https://github.com/taskcluster/taskcluster-rfcs/pull/34)
 * Initially Proposed by: @djmitche
 
 # Proposal

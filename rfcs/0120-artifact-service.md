@@ -1,5 +1,5 @@
 # RFC 120 object Service
-* Comments: [#120](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/120)
+* Comments: [#120](https://github.com/taskcluster/taskcluster-rfcs/pull/120)
 * Proposed by: @jhford
 
 # Summary

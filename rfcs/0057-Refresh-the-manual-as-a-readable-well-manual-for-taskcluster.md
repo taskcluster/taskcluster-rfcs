@@ -1,5 +1,5 @@
 # RFC 57 - Refresh the manual as a readable .. well, manual for taskcluster
-* Comments: [#57](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/57)
+* Comments: [#57](https://github.com/taskcluster/taskcluster-rfcs/pull/57)
 * Initially Proposed by: @djmitche
 
 

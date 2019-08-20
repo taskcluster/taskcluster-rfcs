@@ -1,5 +1,5 @@
 # RFC 97 - Provisioner, worker-type & worker actions
-* Comments: [#97](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/97)
+* Comments: [#97](https://github.com/taskcluster/taskcluster-rfcs/pull/97)
 * Initially Proposed by: @helfi92
 
 # Proposal

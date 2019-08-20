@@ -1,5 +1,5 @@
 # RFC 124 - Worker Manager
-* Comments: [#124](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/124)
+* Comments: [#124](https://github.com/taskcluster/taskcluster-rfcs/pull/124)
 * Proposed by: @jhford
 
 # Summary

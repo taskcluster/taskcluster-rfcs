@@ -1,5 +1,5 @@
 # RFC 76 - Turn off the scheduler service
-* Comments: [#76](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/76)
+* Comments: [#76](https://github.com/taskcluster/taskcluster-rfcs/pull/76)
 * Initially Proposed by: @djmitche
 
 # Summary

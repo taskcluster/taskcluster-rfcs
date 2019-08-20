@@ -1,5 +1,5 @@
 # RFC 91 - Store infra configuration in a distinct repo that does not ride trains
-* Comments: [#91](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/91)
+* Comments: [#91](https://github.com/taskcluster/taskcluster-rfcs/pull/91)
 * Initially Proposed by: @djmitche
 
 

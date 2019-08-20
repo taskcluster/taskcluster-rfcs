@@ -1,5 +1,5 @@
 # RFC 43 - Get rid of tc-vcs completely
-* Comments: [#43](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/43)
+* Comments: [#43](https://github.com/taskcluster/taskcluster-rfcs/pull/43)
 * Initially Proposed by: @djmitche
 
 # Proposal

@@ -1,5 +1,5 @@
 # RFC 136 - Scope Expression Registration
-* Comments: [#136](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/136)
+* Comments: [#136](https://github.com/taskcluster/taskcluster-rfcs/pull/136)
 * Proposed by: @imbstack
 
 # Summary

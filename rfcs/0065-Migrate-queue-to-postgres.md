@@ -1,5 +1,5 @@
 # RFC 65 - Migrate queue to postgres
-* Comments: [#65](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/65)
+* Comments: [#65](https://github.com/taskcluster/taskcluster-rfcs/pull/65)
 * Initially Proposed by: @jonasfj
 
 # Summary

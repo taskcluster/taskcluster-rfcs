@@ -1,5 +1,5 @@
 # RFC <number> - <title>
-* Comments: [#<number>](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/<number>)
+* Comments: [#<number>](https://github.com/taskcluster/taskcluster-rfcs/pull/<number>)
 * Proposed by: @<yourname>
 
 # Summary

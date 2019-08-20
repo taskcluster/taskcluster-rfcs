@@ -1,5 +1,5 @@
 # RFC 20 - Manage pulse credentials centrally
-* Comments: [#20](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/20)
+* Comments: [#20](https://github.com/taskcluster/taskcluster-rfcs/pull/20)
 * Initially Proposed by: @djmitche
 
 # Summary

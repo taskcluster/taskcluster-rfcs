@@ -1,5 +1,5 @@
 # RFC 66 - Allow hooks to be triggered by pulse messages
-* Comments: [#66](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/66)
+* Comments: [#66](https://github.com/taskcluster/taskcluster-rfcs/pull/66)
 * Initially Proposed by: @djmitche
 
 # Summary

@@ -1,5 +1,5 @@
 # RFC 58 - Add more `task.priority` levels
-* Comments: [#58](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/58)
+* Comments: [#58](https://github.com/taskcluster/taskcluster-rfcs/pull/58)
 * Initially Proposed by: @jonasfj
 
 # Proposal

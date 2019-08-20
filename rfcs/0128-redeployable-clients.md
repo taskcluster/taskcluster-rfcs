@@ -1,6 +1,6 @@
 # RFC 0128 - Service metadata in redeployable taskcluster
 
-* Comments: [#128](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/128)
+* Comments: [#128](https://github.com/taskcluster/taskcluster-rfcs/pull/128)
 * Proposed by: @petemoore
 
 # Table of contents

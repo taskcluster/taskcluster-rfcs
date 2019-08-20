@@ -1,5 +1,5 @@
 # RFC 80 - store RFCs in files in the repository, discuss RFC through a PR
-* Comments: [#80](https://api.github.com/repos/taskcluster/taskcluster-rfcs/issues/80)
+* Comments: [#80](https://github.com/taskcluster/taskcluster-rfcs/pull/80)
 * Initially Proposed by: @jhford
 
 # Proposal
