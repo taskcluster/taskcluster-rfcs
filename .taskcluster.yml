@@ -1,0 +1,33 @@
+version: 1
+policy:
+  pullRequests: public
+tasks:
+  - $if: '(tasks_for == "github-pull-request"  && event["action"] in ["opened", "reopened", "synchronize"])'
+    then:
+      taskId: {$eval: as_slugid("toc-test")}
+      created: {$fromNow: ''}
+      deadline: {$fromNow: '2 hours'}
+      provisionerId: aws-provisioner-v1
+      workerType: github-worker
+      payload:
+        maxRunTime: 600
+        image: python:3-alpine
+        command:
+          - /bin/bash
+          - '-c'
+          - >-
+            git clone ${event.pull_request.head.repo.git_url} taskcluster-worker-runner &&
+            cd taskcluster-worker-runner &&
+            git config advice.detachedHead false &&
+            git checkout ${event.pull_request.head.sha} &&
+            python maketoc.py &&
+            if ! output=$(git status --porcelain) || [ -n "$output" ]; then
+              echo "*** 'python maketoc.py' produced changes to the repository; these changes should be checked in ***";
+              git --no-pager diff;
+              exit 1;
+            fi
+      metadata:
+        name: taskcluster-rfcs-toc-test
+        description: checks that RFCS table of contents is updated
+        owner: taskcluster-internal@mozilla.com
+        source: ${event.repository.url}
