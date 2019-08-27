@@ -57,3 +57,4 @@ See [our roadmap](roadmap.md) for a more general idea of where we are headed.
 | RFC#139 | [Increase identifier length from 20 to 38](rfcs/0139-longer-identifiers.md)                                                                                                            |
 | RFC#145 | [Worker Pools and Task Queues](rfcs/0145-workerpoolid-taskqueueid.md)                                                                                                                  |
 | RFC#147 | [Third-Party Login](rfcs/0147-third-party-login.md)                                                                                                                                    |
+| RFC#148 | [TASKCLUSTER_WORKER_LOCATION](rfcs/0148-taskcluster-worker-location.md)                                                                                                                |

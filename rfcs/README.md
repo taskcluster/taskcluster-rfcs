@@ -41,3 +41,4 @@
 | RFC#139 | [Increase identifier length from 20 to 38](0139-longer-identifiers.md)                                                                                                            |
 | RFC#145 | [Worker Pools and Task Queues](0145-workerpoolid-taskqueueid.md)                                                                                                                  |
 | RFC#147 | [Third-Party Login](0147-third-party-login.md)                                                                                                                                    |
+| RFC#148 | [TASKCLUSTER_WORKER_LOCATION](0148-taskcluster-worker-location.md)                                                                                                                |
