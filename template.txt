@@ -18,10 +18,14 @@
  are there security or performance implications?
  how will this be implemented?>
 
-# Implementation Links
+# Implementation
 
-<once the RFC is decided, these links will provide readers a way to track the
-implementation through to completion>
+<Once the RFC is decided, these links will provide readers a way to track the
+implementation through to completion, and to know if they are running a new
+enough version to take advantage of this change.  It's fine to update this
+section using short PRs or pushing directly to master after the RFC is
+decided>
 
 * <link to tracker bug, issue, etc.>
 * <...>
+* Implemented in Taskcluster version ...
