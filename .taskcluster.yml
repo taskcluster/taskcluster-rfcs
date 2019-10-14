@@ -7,11 +7,11 @@ tasks:
       taskId: {$eval: as_slugid("toc-test")}
       created: {$fromNow: ''}
       deadline: {$fromNow: '2 hours'}
-      provisionerId: aws-provisioner-v1
-      workerType: github-worker
+      provisionerId: proj-taskcluster
+      workerType: ci
       payload:
         maxRunTime: 600
-        image: python:3-alpine
+        image: python:3
         command:
           - /bin/bash
           - '-c'
