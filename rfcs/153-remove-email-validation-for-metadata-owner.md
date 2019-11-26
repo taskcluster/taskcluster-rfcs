@@ -1,5 +1,5 @@
-# RFC <number> - remove the email validation for metadata.owner
-* Comments: [#<number>](https://github.com/taskcluster/taskcluster-rfcs/pull/<number>)
+# RFC 153 - remove the email validation for metadata.owner
+* Comments: [#153](https://github.com/taskcluster/taskcluster-rfcs/pull/153)
 * Proposed by: @mihaitabara
 
 # Summary
