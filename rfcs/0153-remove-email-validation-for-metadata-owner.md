@@ -5,11 +5,11 @@
 # Summary
 
 We want to remove the email validation for `metadata.owner` to allow Github applications to safely
-set their names.
+set their names within the fields used in `.taskcluster.yml` without breaking the CI automation.
 
 ## Motivation
 
-Using Github bots has become a necessity in many repositories that are already using Taskcluster as their CI. Many of these bots tweak some of the input fed in `.taskcluster.yml` without an easy way to tweak it.
+Using Github bots has become a necessity in many repositories that are already using Taskcluster as their CI. Many of these bots set some of the context input fed in `.taskcluster.yml` without an easy way to tweak it.
 One of these examples is the `event.sender.login` which may be directly inferred from the bot without the possibility of configuring it. Since this field is often used to feed the `metadata.owner` with an email address, it
 can often break taskcluster-gitub logic.
 
