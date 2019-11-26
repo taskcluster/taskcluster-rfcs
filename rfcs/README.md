@@ -42,3 +42,4 @@
 | RFC#145 | [Worker Pools and Task Queues](0145-workerpoolid-taskqueueid.md)                                                                                                                  |
 | RFC#147 | [Third-Party Login](0147-third-party-login.md)                                                                                                                                    |
 | RFC#148 | [TASKCLUSTER_WORKER_LOCATION](0148-taskcluster-worker-location.md)                                                                                                                |
+| RFC#153 | [remove the email validation for metadata.owner](0153-remove-email-validation-for-metadata-owner.md)                                                                              |
