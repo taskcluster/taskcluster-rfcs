@@ -17,7 +17,7 @@ Removing the email validation causes no harm and avoids `if/else` statements tha
 
 # Details
 
-In the Github world, there are some helpful applications that are running in order to help developers. Examples include but are not limited to [dependabot](https://dependabot.com/) and [bors](https://github.com/bors-ng/bors-ng) which are used successful
+In the Github world, there are some helpful applications that are running in order to help developers. Examples include but are not limited to [dependabot](https://dependabot.com/) and [bors](https://github.com/bors-ng/bors-ng) which are used successfully
 in projects such as [application-services](https://github.com/mozilla/application-services/) or [android-components](https://github.com/mozilla-mobile/android-components/). When `taskcluster-github` is rendering the `.taskcluster.yml`,
 it sometimes hits errors when validating the email set for `metadata.owner`. Normally that field is set to `${user}@users.noreply.github.com` where `user = ${event.sender.login}`.
 For primitive github operations, sans bots, this works well while for cron-jobs triggered from hooks, we feed that value to our covenience. However, for when we're using bots, we may not always have that flexibility of tweaking the bot's input.
