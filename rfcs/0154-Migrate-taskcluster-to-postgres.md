@@ -47,6 +47,10 @@ The transition to Postgres will be done in two steps:
    Azure.
 2. Go fully into normalized SQL tables.
 
+In both steps, Taskcluster will get confidence in the correctness and
+performance of the implementation by first testing it in the development and
+staging environments before running this on the production environment.
+
 Upon completion of step 1, deployers of Taskcluster will need to provide a DB
 URL (maybe several) then run a script to "load" data from Azure to Postgres
 during a downtime.
