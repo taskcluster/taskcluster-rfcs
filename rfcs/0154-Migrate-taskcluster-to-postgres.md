@@ -48,8 +48,8 @@ The transition to Postgres will be done in two steps:
 2. Go fully into normalized SQL tables.
 
 In both steps, Taskcluster will get confidence in the correctness and
-performance of the implementation by first testing it in the development and
-staging environments before running this on the production environment.
+performance of the implementation by load testing it on the development and
+staging environments prior to running this on the production environment.
 
 Upon completion of step 1, deployers of Taskcluster will need to provide a DB
 URL (maybe several) then run a script to "load" data from Azure to Postgres
@@ -58,6 +58,45 @@ during a downtime.
 There will be a version of Taskcluster that supports Postgres and not Azure,
 with the previous version supporting Azure and not Postgres. So upgrading to
 that version is something that happens in a downtime.
+
+The point of no return will be 2 weeks. This should give us enough time to see
+if anything goes wrong. At any time before the point of no return, rolling back
+will consist of switching back to a previous release of Taskcluster and
+reverting any kubernetes config changes that were done for this migration. The
+impact of rolling back will be data loss of all data after the planned downtime.
+There will be no data loss if rolling back happens during the downtime.
+
+### Tracing
+
+Taskcluster will use New Relic to a have better visibility of the database,
+especially before the point of no return (2 weeks). This should help in
+monitoring performance and easier troubleshooting.
+
+### Load Testing
+
+Taskcluster will get confidence in the correctness and performance of its
+implementation with load testing the database to simulate a realistic user load
+prior to using postgres in production. We will load test the data volume in the
+database as well as the number of queries coming in.
+
+#### Data Volume
+
+To test the scalability and performance of the system, we will do an import of
+the FirefoxCI production database (minus the secrets) into the postgres database
+on the staging deployment and then observe if the database crashes or if there
+are any noticeable performance issues that arise.
+
+#### Parallel Requests
+
+To simulate, as closely as possible, actual traffic, we will create a script
+that initiates a big amount of processes (e.g., 10,000) where each process
+will simulate a number of parallel requests (e.g., 100) doing things like:
+* claimWork (an endpoint that interacts with a bunch of tables
+an queues)
+* create a worker type
+* resolve artifact
+* call the worker manager register endpoint
+* call often used endpoints like getTasks, getTaskGroup, getTaskByIndexRoute, etc.
 
 ## Schema Migration
 
@@ -102,9 +141,9 @@ procedure can be rewritten to return an empty result or perform no action.
 ## Ad-hoc Queries
 
 Direct SQL access to the database is *not allowed*. Taskcluster will allow
-ad-hoc queries on the data-set via stored procedures with access controlled by
-Postgres permissions. This feature will most likely be done after step 2 of the
-transition.
+ad-hoc read-only queries on the data-set via stored procedures with access
+controlled by Postgres permissions. This feature will most likely be done after
+step 2 of the transition.
 
 ## Permissions
 
