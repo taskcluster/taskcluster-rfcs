@@ -1,4 +1,4 @@
-# RFC  - Create an object service
+# RFC 155 - Create an object service
 * Updates: [RFC 120](https://github.com/taskcluster/taskcluster-rfcs/blob/master/rfcs/0120-artifact-service.md)
 * Obsoletes: None
 * Comments: [#116](https://github.com/taskcluster/taskcluster-rfcs/pull/116), [#120](https://github.com/taskcluster/taskcluster-rfcs/pull/120)
