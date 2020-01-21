@@ -7,8 +7,7 @@
 # Summary
 Taskcluster tasks often produce artifacts during the course of being run.
 Examples include browser distribution archives, json metadata and log files.
-We currently store artifacts in a single region of S3 and split management of
-artifacts between the Queue and allegedly Cloud Mirror.  
+We currently store artifacts in a single region of S3, and the service we use for that is the Queue.  
 
 This project is to design an object management api which pulls that functionality 
 out of the Queue and enables support of multiple clouds.
@@ -18,11 +17,14 @@ implementation details.
 
 # Motivation
 
-* We want to pay less, so we want to be able to store things in different regions and clouds
+* We want to pay less, so we want to be able to store things in different regions and clouds, particularly:
+  * We want to be able to switch from AWS to any other cloud provider with ease
+  * We want to be able to manage ingress traffic from other cloud providers
+  * We want to be able to temporarily cache artifacts in a given provider where they might be needed repeatedly (e.g. builds for testing)
 * We want the Queue to be easier to understand, develop and maintain
-* We want object management to be easier to understand, develop and maintain
-* We want better object handling (including security, integrity and de-duplication) without 
+* We want better object handling (including security, integrity and de-duplication) without
 increasing complexity of the Queue codebase
+* We want object management to be easier to understand, develop and maintain
 
 # Details
 
@@ -42,7 +44,8 @@ integrity is being developed. The service and the CLI tool should take the plan 
 The service should allow for flexibility in choosing artifact/object encryption methods and algorithms.
 
 Implementation of any cross-region and/or cross-cloud functionality must be justified as far as money and time cost goes.
-The service must be efficient.
+The service must be efficient as far the storage and network costs go, without sacrificing the time it takes to complete operations.
+The former should be prioritized by default, unless the latter is impacted in such a way that any economy looses value.
 
 ## API
 
