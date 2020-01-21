@@ -84,13 +84,17 @@ database as well as the number of queries coming in.
 To test the scalability and performance of the system, we will do an import of
 the FirefoxCI production database (minus the secrets) into the postgres database
 on the staging deployment and then observe if the database crashes or if there
-are any noticeable performance issues that arise.
+are any noticeable performance issues that arise. To make sure the database
+performs as expected when it has production quantities in it, we will initiate
+parallel requests on the same instance that we've importated the production
+quantities of data into. More on that in the next section.
 
 #### Parallel Requests
 
 To simulate, as closely as possible, actual traffic, we will create a script
 that initiates a big amount of processes (e.g., 10,000) where each process
-will simulate a number of parallel requests (e.g., 100) doing things like:
+will simulate a number of parallel requests (e.g., 100) on the imported
+production quantities doing things like:
 * claimWork (an endpoint that interacts with a bunch of tables
 an queues)
 * create a worker type
