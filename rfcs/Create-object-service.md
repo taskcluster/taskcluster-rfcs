@@ -47,7 +47,14 @@ Implementation of any cross-region and/or cross-cloud functionality must be just
 The service must be efficient as far the storage and network costs go, without sacrificing the time it takes to complete operations.
 The former should be prioritized by default, unless the latter is impacted in such a way that any economy looses value.
 
-Object data should not pass through the service (meaning in Kubernetes) for upload or download. It's fine for data to flow through other servers that are located closer to workers (for example to mirror data).
+Object data should not pass through the service (meaning in Kubernetes) for upload or download. 
+It's fine for data to flow through other servers that are located closer to workers (for example to mirror data).
+The reason for this is that Taskcluster is deployed in Kubernetes, and handling large amounts of data will likely to be slow and expensive.
+
+The service should provide a verified hash of the contents of each object.
+
+HTTP download tools such as Firefox, curl, and wget should be able to download objects without requiring additional scripting; 
+these tools may miss features like automatic retries and checking hashes, but should work in the success case.
 
 ## API
 
