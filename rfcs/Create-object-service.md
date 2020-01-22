@@ -72,7 +72,7 @@ I think we can protect the retrieval of private objects by scopes, whereas publi
 ### Updating
 No such endpoint. We don't want the objects to be updatable for security reasons.
 
-###Deletion
+### Deletion
 `DELETE /object/:name`
 The initial idea was not to have this endpoint. However, without it the destructive action will be difficult to do and will take more time. 
 If our goal is to save money, maybe this action should be easier and faster to do.
