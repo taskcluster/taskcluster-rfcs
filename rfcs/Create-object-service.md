@@ -47,9 +47,28 @@ Implementation of any cross-region and/or cross-cloud functionality must be just
 The service must be efficient as far the storage and network costs go, without sacrificing the time it takes to complete operations.
 The former should be prioritized by default, unless the latter is impacted in such a way that any economy looses value.
 
+Object data should not pass through the service (meaning in Kubernetes) for upload or download. It's fine for data to flow through other servers that are located closer to workers (for example to mirror data).
+
 ## API
 
-[See Swagger draft documentation](https://app.swaggerhub.com/apis/taskcluster/object-service/0.1.0)
+### Creation
+Consists of multiple stages:
+1. `POST /object/:name` - object service creates a URL and/or a request and returns it. 
+All necessary information (such as the origin of the request - like cloud, region, etc.) will get passed in the body of the request.
+2. `PUT ...` - makes the request obtained at the step 1, or uses the URL obtained at the step 1. This sends in the data to the cloud provider.
+This request is made to a cloud provider, using the cloud provider's API, so the data itself goes from the caller directly to the service provider.
+
+### Retrieval
+`GET /object/:name`
+I think we can protect the retrieval of private objects by scopes, whereas public ones won’t be protected.
+
+### Updating
+No such endpoint. We don't want the objects to be updatable for security reasons.
+
+###Deletion
+`DELETE /object/:name`
+The initial idea was not to have this endpoint. However, without it the destructive action will be difficult to do and will take more time. 
+If our goal is to save money, maybe this action should be easier and faster to do.
 
 # Implementation
 
