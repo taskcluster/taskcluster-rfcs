@@ -56,6 +56,12 @@ The service should provide a verified hash of the contents of each object.
 HTTP download tools such as Firefox, curl, and wget should be able to download objects without requiring additional scripting; 
 these tools may miss features like automatic retries and checking hashes, but should work in the success case.
 
+It would probably make sense to utilize the server-side encryption that the most cloud-service providers offer
+(with keys that are manage either by the cloud service provider or us).
+
+The service should be able to work with a CDN, and the service should continue giving out CDN urls instead of direct S3 
+(or equivalent) URLs in the situations where this is done today.
+
 ## API
 
 ### Creation
@@ -75,7 +81,10 @@ No such endpoint. We don't want the objects to be updatable for security reasons
 ### Deletion
 `DELETE /object/:name`
 The initial idea was not to have this endpoint. However, without it the destructive action will be difficult to do and will take more time. 
-If our goal is to save money, maybe this action should be easier and faster to do.
+If our goal is to save money, maybe this action should be easier and faster to do. Having an endpoint also offers some flexibility
+in ways we can expose the functionality.
+
+Another option for deleting objects would be to have certain settings in the buckets' lifecycle.
 
 # Implementation
 
