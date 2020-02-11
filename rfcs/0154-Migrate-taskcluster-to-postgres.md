@@ -142,6 +142,11 @@ A consequence of this design is that "procedures are forever" -- an upgrade can
 never delete a stored procedure. At worst, when a feature is removed, a stored
 procedure can be rewritten to return an empty result or perform no action.
 
+Given that procedures will operate identical before and after the upgrade,
+rolling back won't cause the database to throw an error but will have a cost to
+it. Any changes that were made to the database will still be there after rolling
+back.
+
 ## Ad-hoc Queries
 
 Direct SQL access to the database is *not allowed*. Taskcluster will allow
