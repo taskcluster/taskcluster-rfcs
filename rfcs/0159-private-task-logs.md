@@ -52,6 +52,26 @@ However, its URL cannot be modified, but it can be replaced with an artifact of 
 
 Workers create a LiveLog artifact when a task begins, and replace that with a "normal" artifact (such as S3) when the task completes.
 The URL in the LiveLog artifact should contain enough entropy that it cannot be guessed, preventing anyone who cannot read the LiveLog artifact from connecting to the worker to download logs.
+Workers should support an option in `task.payload` to disable live logging (while still creating a log artifact at task completion).
+
+Workers should take care to prevent a task from creating an artifact with the same name as the task log artifact.
+The (complete) task log should be created after all other task artifacts are created, so that it can include logging for those calls to `createArtifact`.
+
+# Security Considerations
+
+## Artifact Privacy
+
+The queue already implements scope-based protection for `getArtifact`: fetching an artifact requires `queue:get-artifact:<name>` when the name does not begin with `public/`.
+This scope does not refer to a specific task, so access is controlled only based on artifact name.
+
+## Live-Log Privacy
+
+This protection would extend to LiveLog artifacts, permitting only requests with the proper scopes to get the livelog URL.
+However, because the LiveLog artifact results in a redirect to this URL, the request to that URL would not contain any authentication information.
+Live-log URLs already contain a random path component to make them unguessable, but this is not a particularly robust technique for protecting secret data.
+
+Addressing authentication for live logs is out of scope for this RFC.
+Until that weakness is addressed, users of private log artifacts should consider disabling live-logging.
 
 # Implementation
 
