@@ -41,8 +41,10 @@ The updated convention is, briefly, to make the artifact name containing logs co
 
 The convention for task-related conventions is to put information in `task.extra`, using sub-objects to group related configuration.
 In the new design, the log artifact name is found at `task.extra.logs.taskLogArtifact`, with a default value of `public/logs/live.log` for compatibility.
-Workers will be modified to consult this field before creating task log artifacts.
-UIs and other log consumers will be modified to consult this field before fetching task logs.
+Workers will be modified to optionally look for an artifact name somewhere under `task.payload`, defaulting to the value in `task.extra.logs.taskLogArtifact` and applying that field's default if necessary.
+They will use the result as the name for the task log artifact.
+
+UIs and other log consumers will be modified to consult `task.extra.logs.taskLogArtifact`, applying its default, before fetching task logs.
 
 To support live logging, a new queue artifact type, "LiveLog", is added.
 This type is similar to the existing Reference type, in that it contains a URL to which it redirects.
