@@ -56,3 +56,4 @@ See [mechanics](mechanics.md) for more detail.
 | RFC#148 | [TASKCLUSTER_WORKER_LOCATION](rfcs/0148-taskcluster-worker-location.md)                                                                                                                |
 | RFC#153 | [remove the email validation for metadata.owner](rfcs/0153-remove-email-validation-for-metadata-owner.md)                                                                              |
 | RFC#155 | [Create an object service](rfcs/Create-object-service.md)                                                                                                                              |
+| RFC#159 | [Private Task Logs](rfcs/0159-private-task-logs.md)                                                                                                                                    |

@@ -44,3 +44,4 @@
 | RFC#148 | [TASKCLUSTER_WORKER_LOCATION](0148-taskcluster-worker-location.md)                                                                                                                |
 | RFC#153 | [remove the email validation for metadata.owner](0153-remove-email-validation-for-metadata-owner.md)                                                                              |
 | RFC#155 | [Create an object service](Create-object-service.md)                                                                                                                              |
+| RFC#159 | [Private Task Logs](0159-private-task-logs.md)                                                                                                                                    |
