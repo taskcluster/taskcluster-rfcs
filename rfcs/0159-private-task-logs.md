@@ -31,7 +31,7 @@ At the beginning of the task, they create a Reference artifact named `public/log
 When the task is complete, they create a new S3 artifact containing the whole log, named `public/logs/live_backing.log`.
 They then modify the URL in the `public/logs/live.log` artifact (using a [special case in the `createTask` API](https://docs.taskcluster.net/docs/reference/platform/queue/api#createArtifact)) to point to the URL for the `getArtifact` method for the `public/logs/live_backing.log` artifact (`<rootUrl>/api/queue/v1/task/<taskId>/runs/<runId>/artifacts/public/logs/live_backing.log`).
 
-Reference artifacts correspond to HTTP 303 redirects, and HTTP clients do not re-authenticate when following a redirect.
+Reference artifacts correspond to HTTP 303 redirects, and [HTTP clients do not re-authenticate when following a redirect](https://stackoverflow.com/a/28671822/2737366).
 So the fetch of `live_backing.log` is performed without Taskcluster credentials, even if the initial call to `getArtifact` used credentials.
 If `live_backing.log` is always public, this is not a problem, but if it is private then this may result in additional complexity for clients wishing to access task logs.
 
