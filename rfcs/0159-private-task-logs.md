@@ -64,14 +64,26 @@ The (complete) task log should be created after all other task artifacts are cre
 The queue already implements scope-based protection for `getArtifact`: fetching an artifact requires `queue:get-artifact:<name>` when the name does not begin with `public/`.
 This scope does not refer to a specific task, so access is controlled only based on artifact name.
 
+## Public-By-Default
+
+As a whole, Taskcluster is a public-by-default platform, with exceptions for obvious things like secrets.
+While this proposal makes it *possible* to produce private task logs, it does not make that the default configuration.
+An error as simple as a typo in the `task.extra` property name could cause a log that was supposed to be private to be made public instead.
+However, changing the default would constitute a breaking change for existing users of Taskcluster.
+
+For the moment, this proposal does not address this issue, in the expectation that private logs will be a rarely-used, carefully-configured feature.
+Where necessary, users of the feature can add their own double-checks to ensure correct configuration.
+
+If later proposals allow private-by-default Taskcluster deployments, those proposals should address this issue by providing a way to make all task logs private by default.
+
 ## Live-Log Privacy
 
 This protection would extend to LiveLog artifacts, permitting only requests with the proper scopes to get the livelog URL.
 However, because the LiveLog artifact results in a redirect to this URL, the request to that URL would not contain any authentication information.
 Live-log URLs already contain a random path component to make them unguessable, but this is not a particularly robust technique for protecting secret data.
 
-Addressing authentication for live logs is out of scope for this RFC.
-Until that weakness is addressed, users of private log artifacts should consider disabling live-logging.
+Addressing authentication for live logs is possible, but out of scope for this RFC.
+Until that weakness is addressed, workers must automatically disable live-logging when a non-public task-log artifact is configured.
 
 # Implementation
 
