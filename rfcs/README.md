@@ -45,3 +45,4 @@
 | RFC#153 | [remove the email validation for metadata.owner](0153-remove-email-validation-for-metadata-owner.md)                                                                              |
 | RFC#154 | [Migrate Taskcluster to postgres](0154-Migrate-taskcluster-to-postgres.md)                                                                                                        |
 | RFC#155 | [Create an object service](Create-object-service.md)                                                                                                                              |
+| RFC#160 | [Worker Resource Monitoring](0155-worker-resource-monitoring.md)                                                                                                                  |
