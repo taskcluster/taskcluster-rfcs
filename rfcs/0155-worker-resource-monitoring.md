@@ -106,9 +106,9 @@ Schema({
                 Required("available"): int  # Available vmem, system-wide
             },
             Required("cpu"): {
-                Required("user"): int,   # Sum of all per-process times, diffed from previous sample.
-                Required("system"): int,
-                Required("iowait"): int
+                Required("user"): float,   # Sum of all per-process times, diffed from previous sample.
+                Required("system"): float,
+                Required("iowait"): float
             },
             Required("disk"): {
                 Required("readCount"): int,  # System values, diffed from previous sample
