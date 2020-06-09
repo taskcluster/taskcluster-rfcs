@@ -1,5 +1,5 @@
-# RFC 0155 - Worker Resource Monitoring
-* Comments: [#<number>](https://github.com/taskcluster/taskcluster-rfcs/pull/<number>)
+# RFC 0160 - Worker Resource Monitoring
+* Comments: [#<number>](https://github.com/taskcluster/taskcluster-rfcs/pull/160)
 * Proposed by: @srfraser
 
 # Summary
