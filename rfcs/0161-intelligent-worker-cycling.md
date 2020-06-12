@@ -58,9 +58,9 @@ logic to decide if a worker pool launch configuration has changed is the same:
   of parameters against the latest worker pool configuration, responses to
   `workermanager.registerWorker` or `workermanager.reregisterWorker` will be
   treated as before, and the worker will not be earmarked for decommission.
-* Otherwise, if Worker Manager is either unable to determine if the launch
+* Otherwise, if Worker Manager is either unable to determine that the launch
   parameters of a given worker are still valid, or is able to determine that
-  they are no longer consisten with the latest worker pool definition, it should:
+  they are no longer consistent with the latest worker pool definition, it should:
 
     * Respond to `workermanager.registerWorker` and `workermanager.reregisterWorker`
       calls with an HTTP 410 response status code
