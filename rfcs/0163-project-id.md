@@ -62,7 +62,7 @@ Tasks have only random identifiers (`taskIds`), and thus require a separate fiel
 
 ## Tasks
 
-Tasks will have a new top-level property, `projectId`, of unlimited length.
+Tasks will have a new top-level property, `projectId`, of unlimited length, composed of printable ASCII characters.
 The property will appear in task definitions returned from various API methods, like any other property of a task (but see "Compatibility" below).
 The property does not automatically appear in Pulse routes.
 
