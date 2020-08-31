@@ -63,7 +63,7 @@ Tasks have only random identifiers (`taskIds`), and thus require a separate fiel
 ## Tasks
 
 Tasks will have a new top-level property, `projectId`, of unlimited length.
-The property will appear in task definitions returned from various API methods, like any other property of a task.
+The property will appear in task definitions returned from various API methods, like any other property of a task (but see "Compatibility" below).
 The property does not automatically appear in Pulse routes.
 
 ## Scopes and API Methods
@@ -83,12 +83,14 @@ For example, would `queue:cancel-task:taskcluster-ui/*` refer to tasks with `sch
 
 ## Compatibility
 
-To support the transition from the current situation to one where every task has a `projectId`, this RFC adds a distinguished identifier, `none`
+To support the transition from the current situation to one where every task has a `projectId`, this RFC specifies a default `projectId` for tasks, `none`.
 On upgrade to the version of Taskcluster supporting `projectId`, every existing task will be given `projectId` `none`.
-Calls to `createTask` that omit a `projectId` will create a task with `projectId` `none`, in which case the scope `queue:create-task:project:none` is *not* required.
-Calling `createTask` with `projectId` explicitly set to `none` *will* require the scope.
+Calls to `createTask` that omit a `projectId` will create a task with `projectId` `none`, in which case the scope `queue:create-task:project:none` *is* required.
 
-This allows existing code to continue operating after the upgrade.
+To allow existing code to continue operating after the upgrade, users will need to configure roles, decision tasks, and so on such that all calls to `queue.createTask` are made with `queue:create-task:project:none`.
+While this can be done in advance of the upgrade, it will be an error-prone operation especially for decision tasks and similar tasks where scopes are typically enumerated one-by-one.
+However, once the upgrade occurs, errors from any missed changes will be clear and easy to fix.
+
 Calls to `createTask` without a `projectId` will be considered deprecated and support may be removed entirely one year after this change is released.
 
 No changes to the manipulation methods are required for compatibility.
