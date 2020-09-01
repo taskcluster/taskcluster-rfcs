@@ -72,6 +72,9 @@ The property does not automatically appear in Pulse routes.
 
 The Queue service's `createTask` API method will require the scope `queue:create-task:project:<projectId>` in addition to the current set of scopes.
 
+This scope is required to satisfy the fourth use-case, regarding process accounting.
+It allows use of scopes to limit who or what may create a task in a particular project, in effect limiting who may "spend" that project's budget.
+
 ### Manipulation
 
 The Queue service's `cancelTask`, `scheduleTask`, and `rerunTask` API methods currently require `queue:<method-name>:<schedulerId>/<taskGroupId>/<taskId>` or a legacy scope set.
@@ -85,24 +88,21 @@ For example, would `queue:cancel-task:taskcluster-ui/*` refer to tasks with `sch
 
 To support the transition from the current situation to one where every task has a `projectId`, this RFC specifies a default `projectId` for tasks, `none`.
 On upgrade to the version of Taskcluster supporting `projectId`, every existing task will be given `projectId` `none`.
-Calls to `createTask` that omit a `projectId` will create a task with `projectId` `none`, in which case the scope `queue:create-task:project:none` *is* required.
+Calls to `createTask` that omit a `projectId` will create a task with `projectId` `none`, in which case the scope `queue:create-task:project:none` is *not* required.
+Calls to `createTask` with `projectId` explicitly set to `none` *will* require the scope.
 
-To allow existing code to continue operating after the upgrade, users will need to configure roles, decision tasks, and so on such that all calls to `queue.createTask` are made with `queue:create-task:project:none`.
-While this can be done in advance of the upgrade, it will be an error-prone operation especially for decision tasks and similar tasks where scopes are typically enumerated one-by-one.
-However, once the upgrade occurs, errors from any missed changes will be clear and easy to fix.
-
+This allows existing code to continue operating after the upgrade.
 Calls to `createTask` without a `projectId` will be considered deprecated and support may be removed entirely one year after this change is released.
 
 No changes to the manipulation methods are required for compatibility.
 
 # Open Questions
 
-## Must `createTask` Be Scope-Restricted?
+## Should `queue.task()` return a payload containing `projectId: "none"`?
 
-If the proposed restrictions on `createTask` described above were removed, the result would be that anyone can create a task in any project.
-The effect, in terms of threat analysis, is that Mallory can create a task which Alice can cancel or rerun.
-That's not awful, and might be a reasonable price to pay to avoid the additional complexity of `createTask`'s scope requirements and the unique `none` `projectId`.
-However, it would affect accounting in the fourth use-case: Mallory's task would be "billed" to Alice's project.
+The risk is that returning an unexpected value in a task payload will cause task validations, such as chain-of-trust, to fail.
+The alternative would be to omit `projectId` from the task payload when it is `"none"`.
+However, this alternative differs from the handling of all other fields in a task payload (for example, `task.extra` is always present, defaulting to `{}`).
 
 # Implementation
 
