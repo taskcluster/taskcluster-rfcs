@@ -1,5 +1,5 @@
-# RFC <number> - Worker Machine Image Building Automation
-* Comments: [#<number>](https://github.com/taskcluster/taskcluster-rfcs/pull/<number>)
+# RFC 164 - Worker Machine Image Building Automation
+* Comments: [#164](https://github.com/taskcluster/taskcluster-rfcs/pull/164)
 * Proposed by: @petemoore
 
 # Summary
