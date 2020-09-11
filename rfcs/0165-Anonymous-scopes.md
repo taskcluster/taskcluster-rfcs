@@ -19,7 +19,7 @@ credentials.
 A single scope will be assumed for all calls (with or without credentials):
 `assume:anonymous`. A new API call will be added to the auth service
 (`authenticateAnonymous`) which will return `{"scopes":...,"expiry":...}`.
-The authentication middleware will call `authenticateAnonymous` but cache the
+The authentication middleware in each service will call `authenticateAnonymous` but cache the
 result until `expiry`. A deploy-time variable will be added (`auth.scopes_ttl`)
 which configures how long the auth service declares looked up scopes to be
 valid. 
