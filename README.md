@@ -57,3 +57,4 @@ See [mechanics](mechanics.md) for more detail.
 | RFC#153 | [remove the email validation for metadata.owner](rfcs/0153-remove-email-validation-for-metadata-owner.md)                                                                              |
 | RFC#154 | [Migrate Taskcluster to postgres](rfcs/0154-Migrate-taskcluster-to-postgres.md)                                                                                                        |
 | RFC#155 | [Create an object service](rfcs/Create-object-service.md)                                                                                                                              |
+| RFC#166 | [Sign Public S3 URLs](rfcs/0166-Sign-public-S3-urls.md)                                                                                                                                |
