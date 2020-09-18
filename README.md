@@ -58,4 +58,5 @@ See [mechanics](mechanics.md) for more detail.
 | RFC#154 | [Migrate Taskcluster to postgres](rfcs/0154-Migrate-taskcluster-to-postgres.md)                                                                                                        |
 | RFC#155 | [Create an object service](rfcs/Create-object-service.md)                                                                                                                              |
 | RFC#163 | [ProjectId](rfcs/0163-project-id.md)                                                                                                                                                   |
+| RFC#165 | [Anonymous scopes](rfcs/0165-Anonymous-scopes.md)                                                                                                                                      |
 | RFC#166 | [Sign Public S3 URLs](rfcs/0166-Sign-public-S3-urls.md)                                                                                                                                |
