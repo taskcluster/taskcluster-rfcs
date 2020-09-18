@@ -28,7 +28,7 @@ areas:
 - All API calls which currently require no scopes will be given explicit
   required scopes, ideally matching their counterparts already with required
   scopes. These exact scopes will be decided at implementation time.
-- The authentication middleware in `taskcluster-lib-api` used by all services
+- The authentication middleware in `taskcluster-lib-api`, used by all services,
   will no longer early out if there are no authorization headers.
 - The remote signature validator (used by all services except the auth service)
   will call `authenticateAnonymous` if no authorization headers are passed.
@@ -49,7 +49,7 @@ areas:
 - Scopes will be expanded every call, this will cause additional overhead for
   anonymous calls.
 - There will need to be some kind of migration to ensure that public
-  clusters automatically inherit the view scopes for all calls.
+  clusters automatically inherit the new scopes for all calls.
   - This could be done as a database migration, inserting all added required
     scopes to the anonymous role as all Taskcluster installations older than
     this change will be assumed to be public.
