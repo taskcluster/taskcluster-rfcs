@@ -141,10 +141,6 @@ this topic.
     new image set, and a test task is created from a task template in the imageset
     directory to test the new image set (I don't think we can use a hook here since
     the commit SHA is a variable input).
-  * If the test task template does not exist, or the task runs but fails, _all_
-    commits from the PR are backed out and a github issue is raised which
-    links to the failed task, and provides this as a justification for the backout
-    as an issue comment.
   * For commits against main, the same process applies, except that it is the
     production worker pools that are updated, not the staging worker pools, and:
 	* the production image sets will be updated to refer to the new machine
