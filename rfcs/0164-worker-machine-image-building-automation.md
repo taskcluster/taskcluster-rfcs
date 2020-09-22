@@ -105,7 +105,7 @@ this topic.
   we are forced to create the `proj-taskcluster.worker-image-builder` tasks from
   a decision task. The author is currently unaware of a reason this would be
   required.
-* The worker type is *manually* secured with a chain of trust gpg key by a
+* The worker type is *manually* secured with a chain of trust ed25519 key by a
   trusted employee
 * Access to image building workers is restricted to only a small whitelist of
   trusted employees
