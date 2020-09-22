@@ -82,7 +82,7 @@ this topic.
 
 * We create a worker type called `proj-taskcluster/worker-image-builder`, which we
   deploy in ec2.
-* Only github.com/mozilla/community-tc-config:main has the required scopes to
+* Only `github.com/mozilla/community-tc-config:branch:*` has the required scopes to
   create tasks for this worker type
 * (Optional) we add a policy to taskcluster-auth that enforces that the
   following scopes:
@@ -98,7 +98,7 @@ this topic.
 
   can only be present in the expanded scopes of the following roles and clients:
 
-    * role `repo:github.com/mozilla/community-tc-config:branch:main`
+    * role `repo:github.com/mozilla/community-tc-config:branch:*`
     * client `static/taskcluster/github`
 
   Note, client `static/taskcluster/queue` shouldn't require such scopes, unless
@@ -113,31 +113,40 @@ this topic.
   one or more public places
 * The community-tc-config `.taskcluster.yml` file will trigger a unique task
   for each image set in the `imagesets` directory of the community-tc-config
-  repo, for any __PR merge commits__ that land on the `main` branch of the repo.
-  This task may be a noop (see later).
-* The script which the worker-image-builder script-worker worker runs:
+  repo, for any __PR commits__ to validate the change. This task may be a noop
+  (see later).
+* The community-tc-config `.taskcluster.yml` file will trigger a different task
+  for any __PR merge commits__ made against `main` branch (more about this
+  later).
+* The script which the worker-image-builder script-worker worker runs for PR
+  commits:
   * Accepts a payload that only contains an image set name, and the git commit
-    SHA of a commit on the `main` branch.
+    SHA of the PR commit
   * Executes a script which is hard-wired into the worker, which determines
-    whether the commit is a valid commit on the main branch, that is newer than
+    whether the commit is a valid PR commit that is a decescendant of
     the commit from which the latest version of the image set was built from, and
     whether, there are any possible changes to the image set build since the most
-    recent build for that image set. For this, a reliable mechanism will be
-    needed that determines which commit of community-tc-config a given imageset
-    is built from. Perhaps this mapping from community-tc-config git commit SHA
-    to imageset names is persisted in community-tc-config repo directly.
+    recent build for that image set in the current PR, or for the image set if
+    there aren't already images built for the current PR (explained below).
+  * For this, a reliable mechanism will be needed that determines which commit
+    of community-tc-config a given imageset is built from. Perhaps this mapping
+    from community-tc-config git commit SHA to imageset names is persisted in
+    community-tc-config repo directly.
   * If there are changes to any files which are used to produce the image set
-    images, a new image set will be built. This includes all files inside the
-    imageset directory, plus the imageset building program(s) and related files.
+    images, a new image set will be built, with name `<imageset>-<PR>`. This
+    includes all files inside the imageset directory, plus the imageset building
+    program(s) and related files.
   * New CoT keys will be generated on the image set.
   * Once built, a staging worker pool is dynamically created that uses the
-    new image set, and the hook `project-taskcluster/test-<imageset>` is fired to
-    test the new image set.
-  * If this hook does not exist, or the hook runs but fails, _all commits_ from
-	the PR are backed out and a github issue is raised which links to the
-    failed hook, and provides this as a justification for the backout as an issue
-    comment.
-  * If all image set test hooks are successful:
+    new image set, and a test task is created from a task template in the imageset
+    directory to test the new image set (I don't think we can use a hook here since
+    the commit SHA is a variable input).
+  * If the test task template does not exist, or the task runs but fails, _all_
+    commits from the PR are backed out and a github issue is raised which
+    links to the failed task, and provides this as a justification for the backout
+    as an issue comment.
+  * For commits against main, the same process applies, except that it is the
+    production worker pools that are updated, not the staging worker pools, and:
 	* the production image sets will be updated to refer to the new machine
 	  images in `/config/imagesets.yml`, and the changes will be committed and
       pushed to the main branch directly.
