@@ -17,6 +17,7 @@ In scope:
   * config changes in community-tc-config repo (roles, clients, secrets, worker
     pool definitions, hooks, ...)
   * rebuilding machine images for workers (AMIs in AWS, machine images in GCP)
+    for both docker-worker and generic-worker
   * updating worker pool definitions to use newly built machine images
 
 Out of scope:
@@ -79,6 +80,17 @@ The new mode-of-operation would be as follows:
 
 See [bug 1395699](https://bugzil.la/1395699) for the original discussion of
 this topic.
+
+Note, the following applies to both docker-worker and generic-worker image
+building. Currently, we don't have a fully automated process to build
+docker-worker machine images in automation, but that is being tackled in
+[taskcluster/scrum#21](https://github.com/taskcluster/scrum/issues/21).
+Once that is tackled, we should be able to move the configuration for
+the docker worker image build into community-tc-config repo, such that we
+can detect when there is a change to it in the process described below.
+The premise of this RFC is that the above epic is completed, in order that
+this RFC can apply equally well to generic-worker and docker-worker
+image sets.
 
 * We create a worker type called `proj-taskcluster/worker-image-builder`, which we
   deploy in ec2.
