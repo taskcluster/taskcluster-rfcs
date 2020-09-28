@@ -46,4 +46,5 @@
 | RFC#154 | [Migrate Taskcluster to postgres](0154-Migrate-taskcluster-to-postgres.md)                                                                                                        |
 | RFC#155 | [Create an object service](Create-object-service.md)                                                                                                                              |
 | RFC#163 | [ProjectId](0163-project-id.md)                                                                                                                                                   |
+| RFC#165 | [Anonymous scopes](0165-Anonymous-scopes.md)                                                                                                                                      |
 | RFC#166 | [Sign Public S3 URLs](0166-Sign-public-S3-urls.md)                                                                                                                                |
