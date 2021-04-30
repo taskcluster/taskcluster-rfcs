@@ -61,3 +61,4 @@ See [mechanics](mechanics.md) for more detail.
 | RFC#163 | [ProjectId](rfcs/0163-project-id.md)                                                                                                                                                   |
 | RFC#165 | [Anonymous scopes](rfcs/0165-Anonymous-scopes.md)                                                                                                                                      |
 | RFC#166 | [Sign Public S3 URLs](rfcs/0166-Sign-public-S3-urls.md)                                                                                                                                |
+| RFC#168 | [Allow comments to trigger Tasks for non-collaborators](rfcs/0168-Trigger-Tests-Based-on-PR-Comments.md)                                                                               |
