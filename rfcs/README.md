@@ -49,3 +49,4 @@
 | RFC#163 | [ProjectId](0163-project-id.md)                                                                                                                                                   |
 | RFC#165 | [Anonymous scopes](0165-Anonymous-scopes.md)                                                                                                                                      |
 | RFC#166 | [Sign Public S3 URLs](0166-Sign-public-S3-urls.md)                                                                                                                                |
+| RFC#168 | [Process Github issue_comment events to support adhoc task creation](0168-Trigger-Tests-Based-on-PR-Comments.md)                                                                  |
