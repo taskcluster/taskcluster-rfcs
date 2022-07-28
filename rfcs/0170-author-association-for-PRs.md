@@ -28,9 +28,8 @@ However if the author is not a collaborator, a new role called `repo:github.com/
 payload.organization }/${ payload.repository }:pull-request-untrusted` will be assumed instead.
 
 To allow projects to tell whether a pull request was created by a collaborator or not, a new
-`is_collaborator` field will be included in the JSON-e context used to evaluate the
-`.taskcluster.yml` file. This field will be present when `tasks_for` is `github-pull-request`
-(regardless of `pullRequest` policy), otherwise it will be undefined.
+`tasks_for` value of `github-pull-request-untrusted` will be used to evaluate the
+`.taskcluster.yml` file.
 
 ## Using the `public_restricted` policy
 
@@ -48,8 +47,8 @@ properly assigned to block running any sensitive tasks on untrusted pull request
 
 Projects that use the `public_restricted` policy will need to make sure they don't try to run
 trusted tasks on untrusted PRs, otherwise they'll get a scope expression error. They'll be able to
-accomplish this via the `is_collaborator` field that Taskcluster Github now passes down to the
-JSON-e context.
+accomplish this by inspecting the `tasks_for` field that Taskcluster Github now passes down to the
+JSON-e context and checking for a value of `github-pull-request-untrusted`.
 
 In the case of a plain `.taskcluster.yml` file, this value could be used in a JSON-e conditional
 statement. In the case of Taskgraph, this could be passed in via a new parameter.
