@@ -51,3 +51,4 @@
 | RFC#166 | [Sign Public S3 URLs](0166-Sign-public-S3-urls.md)                                                                                                                                |
 | RFC#168 | [Process Github issue_comment events to support adhoc task creation](0168-Trigger-Tests-Based-on-PR-Comments.md)                                                                  |
 | RFC#169 | [Easy Taskcluster Setup](0169-Easy-Taskcluster-setup.md)                                                                                                                          |
+| RFC#175 | [Restricted Pull Requests](0175-restricted-pull-requests.md)                                                                                                                          |

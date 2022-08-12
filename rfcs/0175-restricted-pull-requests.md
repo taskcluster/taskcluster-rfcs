@@ -1,4 +1,4 @@
-# RFC 170 - Author Association Roles for Github Pull Requests
+# RFC 175 - Restricted Roles for Github Pull Requests
 
 # Summary
 
