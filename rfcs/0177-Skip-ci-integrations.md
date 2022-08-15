@@ -1,5 +1,5 @@
-# RFC 176 - Skip CI in github integration
-* Comments: [#176](https://github.com/taskcluster/taskcluster-rfcs/pull/176)
+# RFC 177 - Skip CI in github integration
+* Comments: [#177](https://github.com/taskcluster/taskcluster-rfcs/pull/177)
 * Proposed by: @lotas
 
 # Summary
