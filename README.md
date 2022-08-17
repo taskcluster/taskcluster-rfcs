@@ -63,3 +63,4 @@ See [mechanics](mechanics.md) for more detail.
 | RFC#166 | [Sign Public S3 URLs](rfcs/0166-Sign-public-S3-urls.md)                                                                                                                                |
 | RFC#168 | [Process Github issue_comment events to support adhoc task creation](rfcs/0168-Trigger-Tests-Based-on-PR-Comments.md)                                                                  |
 | RFC#169 | [Easy Taskcluster Setup](rfcs/0169-Easy-Taskcluster-setup.md)                                                                                                                          |
+| RFC#175 | [Restricted Pull Requests](rfcs/0175-restricted-pull-requests.md)                                                                                                                      |
