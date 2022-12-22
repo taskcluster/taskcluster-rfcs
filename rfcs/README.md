@@ -53,3 +53,4 @@
 | RFC#169 | [Easy Taskcluster Setup](0169-Easy-Taskcluster-setup.md)                                                                                                                          |
 | RFC#175 | [Restricted Roles for Github Pull Requests](0175-restricted-pull-requests.md)                                                                                                     |
 | RFC#177 | [Skip CI in github integration](0177-Skip-ci-integrations.md)                                                                                                                     |
+| RFC#180 | [Github cancel previous tasks](0180-Github-cancel-previous-tasks.md)                                                                                                              |
