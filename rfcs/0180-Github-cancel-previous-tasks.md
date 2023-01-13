@@ -15,6 +15,8 @@ By cancelling previous task groups and tasks we could save significant amount of
 
 # Details
 
+## Github hooks
+
 This will only apply to non-default branches (and possible protected branches?),
 to allow all pushes to the default branch to have their own builds.
 
@@ -25,6 +27,11 @@ Github's webhook handler upon receiving `push` event would check if there are ot
 If `authCancelPreviousChecks` is set to `true` it will cancel them.
 
 Cancellation will happen for all the non-resolved tasks within the same `taskGroupId`. However, due to the fact that tasks can create their own sub-tasks, there might be cases where running tasks would still manage to create some tasks that might not be cancelled.
+
+## Github API
+
+To make it easier for developers to cancel running builds associated with some specific branch we can expose new API endpoint. `github.cancelBuilds({ organization, repository, branch })` would be able to find all task groups associated with this branch, find all non-resolved tasks within those groups and cancel those.
+
 
 # Implementation
 
