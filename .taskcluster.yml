@@ -1,8 +1,9 @@
 version: 1
+reporting: checks-v1
 policy:
   pullRequests: public
 tasks:
-  - $if: '(tasks_for == "github-pull-request"  && event["action"] in ["opened", "reopened", "synchronize"])'
+  - $if: '(tasks_for == "github-pull-request" && event["action"] in ["opened", "reopened", "synchronize"])'
     then:
       taskId: {$eval: as_slugid("toc-test")}
       created: {$fromNow: ''}
@@ -16,8 +17,8 @@ tasks:
           - /bin/bash
           - '-c'
           - >-
-            git clone ${event.pull_request.head.repo.git_url} taskcluster-worker-runner &&
-            cd taskcluster-worker-runner &&
+            git clone ${event.pull_request.head.repo.clone_url} taskcluster-rfcs &&
+            cd taskcluster-rfcs &&
             git config advice.detachedHead false &&
             git checkout ${event.pull_request.head.sha} &&
             python maketoc.py &&
