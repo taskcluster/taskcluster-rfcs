@@ -66,3 +66,4 @@ See [mechanics](mechanics.md) for more detail.
 | RFC#175 | [Restricted Roles for Github Pull Requests](rfcs/0175-restricted-pull-requests.md)                                                                                                     |
 | RFC#177 | [Skip CI in github integration](rfcs/0177-Skip-ci-integrations.md)                                                                                                                     |
 | RFC#180 | [Github cancel previous tasks](rfcs/0180-Github-cancel-previous-tasks.md)                                                                                                              |
+| RFC#182 | [Allow remote references to .taskcluster.yml files processed by Taskcluster-GitHub](rfcs/0182-taskcluster-yml-remote-references.md)                                                    |
