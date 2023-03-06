@@ -30,6 +30,7 @@ It's time to make an RFC!
 
 * Once you have the pull request number, modify the filename to include it (`rfcs/<number>-<rfc-title>.md`).
   Replace `<number>` in the file with the PR number as well.
+  Run `maketoc.py` to update the READMEs.
   Push again, and mark the PR as ready for review, and add the label `Phase: Proposal` to the PR.
 
 * Champion the RFC.
