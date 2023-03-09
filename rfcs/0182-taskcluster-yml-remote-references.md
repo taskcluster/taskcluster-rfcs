@@ -28,6 +28,12 @@ context:
 
 When `config-from` is present in the `.taskcluster.yml`, existing top level keys such as `policy` and `tasks` are not valid. `context` is optional, and only permitted when `config-from` is present.
 
+In addition to the extra `context` that project repos may define (abovE), Taskcluster-GitHub will provide the following context as well:
+* `taskclusterYmlRepo` will be the full URL to the repo that contains the final `.taskcluster.yml`. In cases where `config-from` is not present this will be the URL of the project repository. In cases where it is present, it will be the reposisitory part of the `config-from` repository, as an `https` URL.
+* `taskclusterYmlRevision` will be the revision in the `taskclusterYmlRepo` of the `.taskcluster.yml` rendered by Taskcluster-GitHub. In cases where `config-from` is set, and a tag or branch reference has been used, it will be deferenced to a revision.
+
+This additional context is intended to allow tasks defined in `.taskcluster.yml` to republish as metadata, but it may have future uses as well.
+
 When Taskcluster-GitHub encounters a `.taskcluster.yml` such as the one above when processing an event for a repository, instead of directly rendering it with the context from the GitHub event, it will instead:
 1) Fetch the `.taskcluster.yml` referenced in `config-from`
 2) Combine the GitHub event context with the context provided in the repository's `.taskcluster.yml` (with GitHub event context taking priority)
