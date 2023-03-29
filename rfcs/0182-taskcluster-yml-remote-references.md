@@ -71,12 +71,4 @@ Note: Only a `.taskcluster.yml` defined directly in a project repository will ha
 
 # Implementation
 
-<Once the RFC is decided, these links will provide readers a way to track the
-implementation through to completion, and to know if they are running a new
-enough version to take advantage of this change.  It's fine to update this
-section using short PRs or pushing directly to master after the RFC is
-decided>
-
-* <link to tracker bug, issue, etc.>
-* <...>
-* Implemented in Taskcluster version ...
+* Filed as [Issue #6138](https://github.com/taskcluster/taskcluster/issues/6138)
