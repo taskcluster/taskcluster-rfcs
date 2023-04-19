@@ -21,10 +21,10 @@ This will only apply to non-default branches (and possible protected branches?),
 to allow all pushes to the default branch to have their own builds.
 
 To be flexible and allow some projects to still run checks for all events, we could add new key to the `.taskcluster.yml` configuration.
-We can introduce top-level configuration option `authCancelPreviousChecks: true` (having `true` by default) to control if this behaviour is desired.
+We can introduce top-level configuration option `autoCancelPreviousChecks: true` (having `true` by default) to control if this behaviour is desired.
 
 Github's webhook handler upon receiving `push` event would check if there are other task groups existing for given branch, that are not HEAD.
-If `authCancelPreviousChecks` is set to `true` it will cancel them.
+If `autoCancelPreviousChecks` is set to `true` it will cancel them.
 
 Cancellation will happen for all the non-resolved tasks within the same `taskGroupId`. However, due to the fact that tasks can create their own sub-tasks, there might be cases where running tasks would still manage to create some tasks that might not be cancelled.
 
