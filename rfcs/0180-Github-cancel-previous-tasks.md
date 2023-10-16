@@ -4,7 +4,7 @@
 
 # Summary
 
-Allow to automatically cancel previous pipelines for github `push` and `pull_request` events.
+Allow to automatically cancel previous pipelines for github ~~`push`~~ and `pull_request` events.
 
 ## Motivation
 
@@ -23,7 +23,7 @@ to allow all pushes to the default branch to have their own builds.
 To be flexible and allow some projects to still run checks for all events, we could add new key to the `.taskcluster.yml` configuration.
 We can introduce top-level configuration option `autoCancelPreviousChecks: true` (having `true` by default) to control if this behaviour is desired.
 
-Github's webhook handler upon receiving `push` event would check if there are other task groups existing for given branch, that are not HEAD.
+~~Github's webhook handler upon receiving `push` event would check if there are other task groups existing for given branch, that are not HEAD.~~
 If `autoCancelPreviousChecks` is set to `true` it will cancel them.
 
 Cancellation will happen for all the non-resolved tasks within the same `taskGroupId`. However, due to the fact that tasks can create their own sub-tasks, there might be cases where running tasks would still manage to create some tasks that might not be cancelled.
@@ -32,7 +32,14 @@ Cancellation will happen for all the non-resolved tasks within the same `taskGro
 
 To make it easier for developers to cancel running builds associated with some specific branch we can expose new API endpoint. `github.cancelBuilds({ organization, repository, branch })` would be able to find all task groups associated with this branch, find all non-resolved tasks within those groups and cancel those.
 
-
 # Implementation
 
 * Original request issue [#5621](https://github.com/taskcluster/taskcluster/issues/5621)
+
+## Changes to the original proposal
+
+Due to the bug [#6616](https://github.com/taskcluster/taskcluster/issues/6616) it was decided that `push` events would not be handled.
+Only `pull_request` events to cancel builds for the same pull request.
+
+This is because same commit may belong to different branches like `main`, `production`, `staging`, etc.
+And to keep configuration simple we decided to only handle `pull_request` events.
