@@ -55,3 +55,4 @@
 | RFC#177 | [Skip CI in github integration](0177-Skip-ci-integrations.md)                                                                                                                     |
 | RFC#180 | [Github cancel previous tasks](0180-Github-cancel-previous-tasks.md)                                                                                                              |
 | RFC#182 | [Allow remote references to .taskcluster.yml files processed by Taskcluster-GitHub](0182-taskcluster-yml-remote-references.md)                                                    |
+| RFC#189 | [Batch APIs for task definition, status and index path](0189-batch-task-apis.md)                                                                                                  |
