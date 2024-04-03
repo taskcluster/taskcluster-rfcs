@@ -56,4 +56,5 @@
 | RFC#180 | [Github cancel previous tasks](0180-Github-cancel-previous-tasks.md)                                                                                                              |
 | RFC#182 | [Allow remote references to .taskcluster.yml files processed by Taskcluster-GitHub](0182-taskcluster-yml-remote-references.md)                                                    |
 | RFC#189 | [Batch APIs for task definition, status and index path](0189-batch-task-apis.md)                                                                                                  |
+| RFC#190 | [Queue change task / task group priority](0190-queue-change-task-run-priority.md)                                                                                                 |
 | RFC#191 | [Worker Manager launch configurations](0191-worker-manager-launch-configs.md)                                                                                                     |
