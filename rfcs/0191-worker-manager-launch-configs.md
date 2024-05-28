@@ -54,8 +54,11 @@ Worker-manager will publish additional events to Pulse to allow external systems
 * `launch-configuration-archived`
 * `launch-configuration-paused`
 * `launch-configuration-resumed`
-* `worker-registered`
-* `worker-failure` (provisioning or starting up failure, will include `workerPoolId` and `launchConfigurationId`)
+* `worker-error` (provisioning or starting up failure, will include `workerPoolId` and `launchConfigurationId`)
+* `worker-running` (registered, ready for work)
+* `worker-requested` (worker just requested, provisioning is starting)
+* `worker-stopping` (for azure when initial stopping request comes in)
+* `worker-stopped`
 
 New API endpoints will be introduced:
 
