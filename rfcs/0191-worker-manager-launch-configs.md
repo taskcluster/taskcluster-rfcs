@@ -27,11 +27,6 @@ Each worker pool will have zero or more **launch configurations** associated wit
 
 Each **launch configuration** will be assigned a unique ID (hash of its properties), stored in the database and will be immutable (except for the status flag).
 
-Generated ID will include the following properties:
-
-* top-level config properties (`minCapacity`, `maxCapacity`, `scalingRatio`, `lifecyle`)
-* launch configuration itself
-
 During updates of the worker pool configurations, all existing launch configurations that are not present in the new configuration will be marked as `archived`. Launch configurations that have same unique ID (hash) will be kept active. All other will be created as new launch configurations and marked as active.
 
 ### Launch Configuration weight
