@@ -78,6 +78,19 @@ During worker pool configuration updates, previous launch configurations would b
 Usually they should be kept for as long as the workers, that were created with this configuration.
 Once such workers are expired and removed from db, we can remove the launch configuration as well.
 
+### Worker interaction
+
+Optionally, workers might be able to call worker-manager API periodically to check if their launch configuration is still active.
+This could superseed previous `deploymentId` mechanism.
+
+### Static workers
+
+`static` worker pool configuration differs from the regular worker pool configuration in that it does not have any launch configurations.
+
+It is stored as `config.workerConfig`.
+
+TBD: how to handle static workers in the context of launch configurations. Should they be excluded from this and kept as is, or should they also be changed to use launch configurations?
+
 ## Examples of weight adjusting
 
 ### Scenario 1 - no failures
