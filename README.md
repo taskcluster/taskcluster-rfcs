@@ -69,3 +69,4 @@ See [mechanics](mechanics.md) for more detail.
 | RFC#182 | [Allow remote references to .taskcluster.yml files processed by Taskcluster-GitHub](rfcs/0182-taskcluster-yml-remote-references.md)                                                    |
 | RFC#189 | [Batch APIs for task definition, status and index path](rfcs/0189-batch-task-apis.md)                                                                                                  |
 | RFC#191 | [Worker Manager launch configurations](rfcs/0191-worker-manager-launch-configs.md)                                                                                                     |
+| RFC#192 | [`minCapacity` ensures workers do not get unnecessarily killed](rfcs/0192-min-capacity-ensures-workers-do-not-get-unnecessarily-killed.md)                                             |
