@@ -87,9 +87,10 @@ This could superseed previous `deploymentId` mechanism.
 
 `static` worker pool configuration differs from the regular worker pool configuration in that it does not have any launch configurations.
 
-It is stored as `config.workerConfig`.
+It is currently stored as `config.workerConfig`.
+To make it consistent with the rest of the worker pools, we would move it to `config.launchConfigurations` with a single launch configuration.
 
-TBD: how to handle static workers in the context of launch configurations. Should they be excluded from this and kept as is, or should they also be changed to use launch configurations?
+Static workers could use new worker-manager API to check if their launch configuration is still active.
 
 ## Examples of weight adjusting
 
