@@ -16,7 +16,7 @@ As Taskcluster is used increasingly for high-importance projects on Github (like
 
 # Details
 
-`.taskcluster.yml` will be modified to support a new `allowComments` policy, which will support `collaborators` as a value. When set, collaborators to the repository may add a comment containing a string beginning with "/taskcluster ", which will cause Taskcluster-Github to render `.taskcluster.yml` with `tasks_for` set to `github-issue-comment`, and a new context variable `event.issue.comment` set to everything appearing after "/taskcluster " in the comment. For example, a comment of "/taskcluster run-tests" will set `event.comment` to `run-tests`. This will allow `.taskcluster.yml` implementers the flexibility to take different actions based on the comment. Some examples:
+`.taskcluster.yml` will be modified to support a new `allowComments` policy, which will support `collaborators` as a value. When set, collaborators to the repository may add a comment containing a string beginning with "/taskcluster ", which will cause Taskcluster-Github to render `.taskcluster.yml` with `tasks_for` set to `github-issue-comment`, and a new context variable `event.taskcluster_comment` set to everything appearing after "/taskcluster " in the comment. For example, a comment of "/taskcluster run-tests" will set `event.taskcluster_comment` to `run-tests`. This will allow `.taskcluster.yml` implementers the flexibility to take different actions based on the comment. Some examples:
 * A comment of "/taskcluster run-tests" could trigger all Tasks
 * A comment of "/taskcluster run-test-foo" could trigger just the `foo` Task
 * A comment of "/taskcluster merge" could trigger a Task that merges the PR
