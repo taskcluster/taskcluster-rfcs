@@ -1,4 +1,4 @@
-# TaskCluster RFCs
+# Taskcluster RFCs
 
 
 ## Background
