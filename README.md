@@ -70,3 +70,4 @@ See [mechanics](mechanics.md) for more detail.
 | RFC#189 | [Batch APIs for task definition, status and index path](rfcs/0189-batch-task-apis.md)                                                                                                  |
 | RFC#190 | [Queue change task / task group priority](rfcs/0190-queue-change-task-run-priority.md)                                                                                                 |
 | RFC#191 | [Worker Manager launch configurations](rfcs/0191-worker-manager-launch-configs.md)                                                                                                     |
+| RFC#196 | [Trigger Hooks from Github Service](rfcs/0196-trigger-hooks-from-github-service.md)                                                                                                    |
