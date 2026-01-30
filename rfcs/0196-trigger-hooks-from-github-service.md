@@ -15,7 +15,7 @@ blob of JSON-e.
 
 Specifically in the Firefox-CI instance, it will allow us to define a single
 well tested and maintained Decision task as a hook. This hides the complexity from
-projects and ensuring all projects are using the most recent and up-to-date
+projects and ensures all projects are using the most recent and up-to-date
 features.
 
 # Details
